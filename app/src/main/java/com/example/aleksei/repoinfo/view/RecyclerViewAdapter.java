@@ -1,4 +1,4 @@
-package com.example.aleksei.repoinfo;
+package com.example.aleksei.repoinfo.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.aleksei.repoinfo.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements RecyclerView.OnClickListener{
 
     ArrayList<HashMap> mapArrayList;
     Context context;
@@ -37,6 +39,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         recycleViewHolder.list_item_tv_starsnumber.setText(mapArrayList.get(i).get("starsKey").toString());
         recycleViewHolder.list_item_tv_forksnumber.setText(mapArrayList.get(i).get("forksKey").toString());
         recycleViewHolder.list_item_tv_watchesnumber.setText(mapArrayList.get(i).get("watchesKey").toString());
+    }
+
+    @Override
+    public void onClick(View v) {
+        //todo rv item selected
     }
 
     public class RecycleViewHolder extends RecyclerView.ViewHolder {

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,13 +15,13 @@ public class RepositoriesActivity extends Activity {
     RecyclerView rvRepositories;
     ArrayList<HashMap> mapArrayList;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repositories);
 
-        //test
+        /* TESTING
         mapArrayList = new ArrayList<>();
         HashMap<String, String> hashMap;
 
@@ -30,7 +33,7 @@ public class RepositoriesActivity extends Activity {
             hashMap.put("watchesKey", "watches");
             mapArrayList.add(hashMap);
         }
-        //testend
+        */
 
         rvRepositories = findViewById(R.id.rv_repositories);
         rvRepositories.setLayoutManager(new LinearLayoutManager(this));

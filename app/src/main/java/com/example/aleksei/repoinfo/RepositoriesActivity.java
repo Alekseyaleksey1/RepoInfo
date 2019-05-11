@@ -12,6 +12,7 @@ public class RepositoriesActivity extends Activity {
     RecyclerView rvRepositories;
     ArrayList<HashMap> mapArrayList;
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

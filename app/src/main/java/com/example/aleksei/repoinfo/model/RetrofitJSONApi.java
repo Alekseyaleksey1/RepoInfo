@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface JSONApi {
+public interface RetrofitJSONApi {
 
     @GET("repositories")
     Call<ArrayList<ModelPOJOShort>> getData();

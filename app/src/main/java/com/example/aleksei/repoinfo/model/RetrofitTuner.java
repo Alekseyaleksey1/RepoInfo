@@ -25,7 +25,7 @@ public class RetrofitTuner {
         return retrofitTuner;
     }
 
-    public JSONApi getJSONApi() {
-        return retrofit.create(JSONApi.class);
+    public RetrofitJSONApi getJSONApi() {
+        return retrofit.create(RetrofitJSONApi.class);
     }
 }

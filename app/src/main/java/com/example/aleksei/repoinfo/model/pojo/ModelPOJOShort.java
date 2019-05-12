@@ -1,10 +1,10 @@
 package com.example.aleksei.repoinfo.model.pojo;
 
 
-public class ModelPOJOShort {//todo pojo
+public class ModelPOJOShort {
     int id;
     String name;
-    String full_name;
+    String full_name;//todo rename this field
     String description;
     String url;
 

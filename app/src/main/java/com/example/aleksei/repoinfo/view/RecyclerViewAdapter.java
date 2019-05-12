@@ -13,7 +13,7 @@ import com.example.aleksei.repoinfo.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements RecyclerView.OnClickListener{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> {
 
     ArrayList<HashMap> mapArrayList;
     Context context;
@@ -41,12 +41,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         recycleViewHolder.list_item_tv_watchesnumber.setText(mapArrayList.get(i).get("watchesKey").toString());
     }
 
-    @Override
-    public void onClick(View v) {
-        //todo rv item selected
-    }
 
-    public class RecycleViewHolder extends RecyclerView.ViewHolder {
+    public class RecycleViewHolder extends RecyclerView.ViewHolder  {
 
         private TextView list_item_tv_repositoryname;
         private TextView list_item_tv_starsnumber;

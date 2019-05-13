@@ -1,5 +1,6 @@
 package com.example.aleksei.repoinfo.model;
 
+import com.example.aleksei.repoinfo.model.pojo.ModelPOJO;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJODetailed;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
 

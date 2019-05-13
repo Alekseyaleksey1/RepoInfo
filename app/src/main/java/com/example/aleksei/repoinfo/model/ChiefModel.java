@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.aleksei.repoinfo.model.pojo.ModelPOJO;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJODetailed;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,53 +20,67 @@ import retrofit2.Response;
 
 public class ChiefModel {
 
-    static ArrayList<ModelPOJOShort> arrayListShortResponce;
-    static ArrayList<ModelPOJODetailed> arrayListDetailedResponce;
+    static List<ModelPOJOShort> arrayListShortResponce;
+    static List<ModelPOJODetailed> arrayListDetailedResponce;
 
 //todo is DB existing? false - getDataFromInterner-saveDataFromInternet, true - getDataFromDatabase
 
     public static void getDataFromInternet(final Context context) {
+
         RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<ModelPOJOShort>>() {
             @Override
             public void onResponse(Call<ArrayList<ModelPOJOShort>> call, Response<ArrayList<ModelPOJOShort>> response) {
 
                 arrayListShortResponce = response.body();
-                arrayListDetailedResponce = new ArrayList<>();
-
-                for (int i = 0; i < arrayListShortResponce.size(); i++) {
-
-                    RetrofitTuner.getInstance().getJSONApi().getDetailedData(arrayListShortResponce.get(i).getFull_name()).enqueue(new Callback<ModelPOJODetailed>() {//todo adequate naming Full_name
-                        @Override
-                        public void onResponse(Call<ModelPOJODetailed> call, Response<ModelPOJODetailed> detailedResponse) {
-
-                            arrayListDetailedResponce.add(detailedResponse.body());
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<ModelPOJODetailed> call, Throwable t) {
-                            //todo add downloading error message
-                        }
-                    });
-                }
-
-                saveDataFromInternet(context, arrayListShortResponce, arrayListDetailedResponce);
+                Log.i("getDataFromInternet", "onResponseShort");
+                ResponceObserver.notifyResponceSuccessful(context);
             }
 
             @Override
             public void onFailure(Call<ArrayList<ModelPOJOShort>> call, Throwable t) {
                 //todo add downloading error message
+                Log.i("getDataFromInternet", "onFailureShort");
             }
         });
+
+
     }
 
-    private static void saveDataFromInternet(Context context, ArrayList<ModelPOJOShort> shortData, ArrayList<ModelPOJODetailed> detailedData) {
+//TODO requesting of detailed data only on click of list item
+    public static void getDetailedDataFromInternet(final Context context) {
+
+        arrayListDetailedResponce = new ArrayList<>();
+
+        for (int i = 0; i < arrayListShortResponce.size(); i++) {
+
+            Log.i("arrayListShortResponce", arrayListShortResponce.get(i).getFull_name());
+
+            RetrofitTuner.getInstance().getJSONApi().getDetailedData(arrayListShortResponce.get(i).getFull_name()).enqueue(new Callback<ModelPOJODetailed>() {//todo adequate naming Full_name
+                @Override
+                public void onResponse(Call<ModelPOJODetailed> call, Response<ModelPOJODetailed> detailedResponse) {
+                    Log.i("getDataFromInternet", "onResponse ModelPOJODetailed");
+                    arrayListDetailedResponce.add(detailedResponse.body());
+
+                }
+
+                @Override
+                public void onFailure(Call<ModelPOJODetailed> call, Throwable t) {
+                    //todo add downloading error message
+                    Log.i("getDataFromInternet", "onFailure ModelPOJODetailed");
+                }
+            });
+        }
+
+        saveDataFromInternet(context, arrayListShortResponce, arrayListDetailedResponce);
+    }
+
+    private static void saveDataFromInternet(Context context, List<ModelPOJOShort> shortData, List<ModelPOJODetailed> detailedData) {
         //todo do this code in thread
         //todo move this code to special class SQLiteWorker
         SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1);//todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
         ContentValues contentValues;
-
+        Log.i("saveDataFromInternet", "");
         for (int i = 0; i < shortData.size(); i++) {
             contentValues = new ContentValues();
             contentValues.put("id", shortData.get(i).getId());

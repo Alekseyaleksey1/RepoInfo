@@ -35,10 +35,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecycleViewHolder recycleViewHolder, int i) {
 
-        recycleViewHolder.list_item_tv_repositoryname.setText(mapArrayList.get(i).get("nameKey").toString());
-        recycleViewHolder.list_item_tv_starsnumber.setText(mapArrayList.get(i).get("starsKey").toString());
-        recycleViewHolder.list_item_tv_forksnumber.setText(mapArrayList.get(i).get("forksKey").toString());
-        recycleViewHolder.list_item_tv_watchesnumber.setText(mapArrayList.get(i).get("watchesKey").toString());
+        recycleViewHolder.list_item_tv_repositoryname.setText(mapArrayList.get(i).get("name").toString());
+        recycleViewHolder.list_item_tv_starsnumber.setText(mapArrayList.get(i).get("stargazerscount").toString());
+        recycleViewHolder.list_item_tv_forksnumber.setText(mapArrayList.get(i).get("forks").toString());
+        recycleViewHolder.list_item_tv_watchesnumber.setText(mapArrayList.get(i).get("watcherscount").toString());
     }
 
 

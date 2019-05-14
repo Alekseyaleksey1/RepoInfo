@@ -1,6 +1,7 @@
 package com.example.aleksei.repoinfo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +14,10 @@ import java.util.HashMap;
 
 public class RepositoriesActivity extends Activity {
 
-    RecyclerView rvRepositories;
-    ArrayList<HashMap> mapArrayList;
+    static RecyclerView rvRepositories;
+    static ArrayList<HashMap> mapArrayList;
+    static Context context;
+
 
 
     @Override
@@ -22,7 +25,7 @@ public class RepositoriesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repositories);
 
-
+        context = getApplicationContext();
         /*mapArrayList = new ArrayList<>();
         HashMap<String, String> hashMap;
 
@@ -36,12 +39,16 @@ public class RepositoriesActivity extends Activity {
         }*/
 
         ChiefModel.getDataFromInternet(this);
+
         rvRepositories = findViewById(R.id.rv_repositories);
         rvRepositories.setLayoutManager(new LinearLayoutManager(this));
-        rvRepositories.setAdapter(new RecyclerViewAdapter(this, ChiefModel.getDataFromDatabase(this)));
-
 
 
         //ChiefModel.getDataFromDatabase(this);
+    }
+
+   public static void init(){
+
+        rvRepositories.setAdapter(new RecyclerViewAdapter(context, ChiefModel.getDataFromDatabase(context)));
     }
 }

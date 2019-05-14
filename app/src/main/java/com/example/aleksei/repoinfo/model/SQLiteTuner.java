@@ -12,7 +12,7 @@ public class SQLiteTuner extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE dbTable (id INTEGER, name TEXT, fullName TEXT, description TEXT, url TEXT, subscriberscount INTEGER, forks INTEGER, stargazerscount INTEGER)");
+        db.execSQL("CREATE TABLE dbTable (id INTEGER, name TEXT, fullName TEXT, description TEXT, url TEXT, watcherscount INTEGER, forks INTEGER, stargazerscount INTEGER)");
     }
 
     @Override

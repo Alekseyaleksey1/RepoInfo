@@ -7,6 +7,33 @@ public class ModelPOJOShort {
     String full_name;//todo rename this field
     String description;
     String url;
+    int stargazers_count;
+    int watchers_count;
+    int forks;
+
+    public int getStargazers_count() {
+        return stargazers_count;
+    }
+
+    public void setStargazers_count(int stargazers_count) {
+        this.stargazers_count = stargazers_count;
+    }
+
+    public int getWatchers_count() {
+        return watchers_count;
+    }
+
+    public void setWatchers_count(int watchers_count) {
+        this.watchers_count = watchers_count;
+    }
+
+    public int getForks() {
+        return forks;
+    }
+
+    public void setForks(int forks) {
+        this.forks = forks;
+    }
 
     public int getId() {
         return id;

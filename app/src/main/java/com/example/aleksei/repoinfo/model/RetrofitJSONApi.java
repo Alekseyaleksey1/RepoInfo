@@ -12,9 +12,9 @@ import retrofit2.http.Path;
 
 public interface RetrofitJSONApi {
 
-    @GET("repositories")
+    @GET("orgs/square/repos?sort=pushed")
     Call<ArrayList<ModelPOJOShort>> getData();
 
-    @GET("repos/{fullName}")
-    Call<ModelPOJODetailed> getDetailedData(@Path("fullName") String fullName);
+   /* @GET("repos/{fullName}")
+    Call<ModelPOJODetailed> getDetailedData(@Path("fullName") String fullName);*/
 }

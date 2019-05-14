@@ -6,14 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.aleksei.repoinfo.RepositoriesActivity;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJO;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJODetailed;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,24 +29,23 @@ public class ChiefModel {
         RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<ModelPOJOShort>>() {
             @Override
             public void onResponse(Call<ArrayList<ModelPOJOShort>> call, Response<ArrayList<ModelPOJOShort>> response) {
-
                 arrayListShortResponce = response.body();
-                Log.i("getDataFromInternet", "onResponseShort");
-                ResponceObserver.notifyResponceSuccessful(context);
+                Log.i("getDataFromInternet", "success");
+                saveDataFromInternet(context, arrayListShortResponce);
             }
 
             @Override
             public void onFailure(Call<ArrayList<ModelPOJOShort>> call, Throwable t) {
                 //todo add downloading error message
-                Log.i("getDataFromInternet", "onFailureShort");
+                Log.i("getDataFromInternet", "error");
             }
         });
-
-
     }
 
+
+
 //TODO requesting of detailed data only on click of list item
-    public static void getDetailedDataFromInternet(final Context context) {
+   /* public static void getDetailedDataFromInternet(final Context context) {
 
         arrayListDetailedResponce = new ArrayList<>();
 
@@ -71,10 +69,10 @@ public class ChiefModel {
             });
         }
 
-        saveDataFromInternet(context, arrayListShortResponce, arrayListDetailedResponce);
-    }
 
-    private static void saveDataFromInternet(Context context, List<ModelPOJOShort> shortData, List<ModelPOJODetailed> detailedData) {
+    }*/
+
+    private static void saveDataFromInternet(Context context, List<ModelPOJOShort> shortData) {
         //todo do this code in thread
         //todo move this code to special class SQLiteWorker
         SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1);//todo put dbName in special class as static final
@@ -88,13 +86,13 @@ public class ChiefModel {
             contentValues.put("fullName", shortData.get(i).getFull_name());
             contentValues.put("description", shortData.get(i).getDescription());
             contentValues.put("url", shortData.get(i).getUrl());
-            contentValues.put("subscriberscount", detailedData.get(i).getSubscribers_count());
-            contentValues.put("forks", detailedData.get(i).getForks());
-            contentValues.put("stargazerscount", detailedData.get(i).getStargazers_count());
+            contentValues.put("watcherscount", shortData.get(i).getWatchers_count());
+            contentValues.put("forks", shortData.get(i).getForks());
+            contentValues.put("stargazerscount", shortData.get(i).getStargazers_count());
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-
+        RepositoriesActivity.init();
     }
 
     public static ArrayList<HashMap> getDataFromDatabase(Context context) {
@@ -112,7 +110,7 @@ public class ChiefModel {
             int fullNameIndex = cursor.getColumnIndex("fullName");
             int descriptionIndex = cursor.getColumnIndex("description");
             int urlIndex = cursor.getColumnIndex("url");
-            int subscriberscountIndex = cursor.getColumnIndex("subscriberscount");
+            int watcherscountIndex = cursor.getColumnIndex("watcherscount");
             int forksIndex = cursor.getColumnIndex("forks");
             int stargazerscountIndex = cursor.getColumnIndex("stargazerscount");
 
@@ -123,7 +121,7 @@ public class ChiefModel {
                 hashMap.put("fullName", cursor.getString(fullNameIndex));
                 hashMap.put("description", cursor.getString(descriptionIndex));
                 hashMap.put("url", cursor.getString(urlIndex));
-                hashMap.put("subscriberscount", String.valueOf(cursor.getInt(subscriberscountIndex)));
+                hashMap.put("watcherscount", String.valueOf(cursor.getInt(watcherscountIndex)));
                 hashMap.put("forks", String.valueOf(cursor.getInt(forksIndex)));
                 hashMap.put("stargazerscount", String.valueOf(cursor.getInt(stargazerscountIndex)));
                 mapArrayList.add(hashMap);

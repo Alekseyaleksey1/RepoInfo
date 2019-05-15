@@ -1,17 +1,41 @@
 package com.example.aleksei.repoinfo.model.pojo;
 
-
+import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ModelPOJOShort {
+public class ModelPOJOShort implements Parcelable{
     int id;
     String name;
-    String full_name;//todo rename this field
+    String full_name;//todo rename this fields
     String description;
     String url;
     int stargazers_count;
     int watchers_count;
     int forks;
+
+    public ModelPOJOShort(){}
+    protected ModelPOJOShort(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        full_name = in.readString();
+        description = in.readString();
+        url = in.readString();
+        stargazers_count = in.readInt();
+        watchers_count = in.readInt();
+        forks = in.readInt();
+    }
+
+    public static final Creator<ModelPOJOShort> CREATOR = new Creator<ModelPOJOShort>() {
+        @Override
+        public ModelPOJOShort createFromParcel(Parcel in) {
+            return new ModelPOJOShort(in);
+        }
+
+        @Override
+        public ModelPOJOShort[] newArray(int size) {
+            return new ModelPOJOShort[size];
+        }
+    };
 
     public int getStargazers_count() {
         return stargazers_count;
@@ -75,5 +99,22 @@ public class ModelPOJOShort {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(full_name);
+        dest.writeString(description);
+        dest.writeString(url);
+        dest.writeInt(stargazers_count);
+        dest.writeInt(watchers_count);
+        dest.writeInt(forks);
     }
 }

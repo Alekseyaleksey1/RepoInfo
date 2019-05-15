@@ -5,14 +5,29 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.example.aleksei.repoinfo.RepositoriesActivity;
+
+import com.example.aleksei.repoinfo.ChiefPresenter;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class SQLiteWorker {
-    public static void saveDataToDatabase(Context context, List<ModelPOJOShort> shortData) {//todo do this code in thread
+    static SQLiteWorker sqLiteWorker;
+    static Context context;
+
+    private SQLiteWorker() {
+    }
+
+    public static SQLiteWorker getInstance(Context appContext) {
+        if (sqLiteWorker == null) {
+            sqLiteWorker = new SQLiteWorker();
+            context = appContext;
+        }
+        return sqLiteWorker;
+    }
+
+    public void saveDataToDatabase(List<ModelPOJOShort> shortData) {//todo do this code in thread
 
         SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1);//todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
@@ -31,13 +46,13 @@ public class SQLiteWorker {
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-        RepositoriesActivity.init();
+        ChiefPresenter.setupAdapter();
     }
 
-    public static ArrayList<HashMap> getDataFromDatabase(Context context) {//todo do this code in thread
+    public ArrayList<ModelPOJOShort> getDataFromDatabase() {//todo do this code in thread
 
-        ArrayList<HashMap> mapArrayList = new ArrayList<>();
-        HashMap<String, String> hashMap;
+        ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
+        //HashMap<String, String> hashMap;
 
         SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1); //todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
@@ -54,7 +69,7 @@ public class SQLiteWorker {
             int stargazerscountIndex = cursor.getColumnIndex("stargazerscount");
 
             do {
-                hashMap = new HashMap<>();
+                /*hashMap = new HashMap<>();
                 hashMap.put("id", String.valueOf(cursor.getInt(idIndex)));
                 hashMap.put("name", cursor.getString(nameIndex));
                 hashMap.put("fullName", cursor.getString(fullNameIndex));
@@ -63,13 +78,25 @@ public class SQLiteWorker {
                 hashMap.put("watcherscount", String.valueOf(cursor.getInt(watcherscountIndex)));
                 hashMap.put("forks", String.valueOf(cursor.getInt(forksIndex)));
                 hashMap.put("stargazerscount", String.valueOf(cursor.getInt(stargazerscountIndex)));
-                mapArrayList.add(hashMap);
+                mapArrayList.add(hashMap);*/
+
+                ModelPOJOShort pojoShort = new ModelPOJOShort();
+                pojoShort.setId(cursor.getInt(idIndex));
+                pojoShort.setName(cursor.getString(nameIndex));
+                pojoShort.setFull_name(cursor.getString(fullNameIndex));
+                pojoShort.setDescription(cursor.getString(descriptionIndex));
+                pojoShort.setUrl(cursor.getString(urlIndex));
+                pojoShort.setWatchers_count(cursor.getInt(watcherscountIndex));
+                pojoShort.setForks(cursor.getInt(forksIndex));
+                pojoShort.setStargazers_count(cursor.getInt(stargazerscountIndex));
+
+                arrayList.add(pojoShort);
             } while (cursor.moveToNext());
         } else {
             Log.d("DBTable", "0 rows");
         }
         tuner.close();
 
-        return mapArrayList;
+        return arrayList;
     }
 }

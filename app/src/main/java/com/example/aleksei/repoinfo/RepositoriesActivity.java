@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.aleksei.repoinfo.model.ChiefModel;
 import com.example.aleksei.repoinfo.model.SQLiteWorker;
+import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
 import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -17,20 +18,23 @@ import java.util.HashMap;
 public class RepositoriesActivity extends Activity {
 
     public static RecyclerView rvRepositories;
-    static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repositories);
-        context = getApplicationContext();
 
-        ChiefModel.getDataFromInternet(this);
+        initializeUI();
+        ChiefPresenter.onUIReady(getApplicationContext());
+    }
+
+
+
+
+    void initializeUI() {
         rvRepositories = findViewById(R.id.rv_repositories);
         rvRepositories.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public static void init() {
-        rvRepositories.setAdapter(new RecyclerViewAdapter(SQLiteWorker.getDataFromDatabase(context)));
-    }
+
 }

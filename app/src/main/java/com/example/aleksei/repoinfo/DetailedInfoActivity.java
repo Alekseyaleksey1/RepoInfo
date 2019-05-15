@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
+
 public class DetailedInfoActivity extends Activity {
 
     TextView tvFullName;
@@ -14,6 +16,9 @@ public class DetailedInfoActivity extends Activity {
         setContentView(R.layout.activity_detailed);
 
         tvFullName = findViewById(R.id.tvFullName);
-        tvFullName.setText(getIntent().getExtras().getString("fullName"));
+
+        ModelPOJOShort pojoShort = getIntent().getExtras().getParcelable("modelPOJO");
+
+        tvFullName.setText(pojoShort.getFull_name());
     }
 }

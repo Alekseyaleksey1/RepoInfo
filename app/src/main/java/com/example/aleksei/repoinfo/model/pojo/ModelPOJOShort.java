@@ -1,6 +1,8 @@
 package com.example.aleksei.repoinfo.model.pojo;
 
 
+import android.os.Parcelable;
+
 public class ModelPOJOShort {
     int id;
     String name;

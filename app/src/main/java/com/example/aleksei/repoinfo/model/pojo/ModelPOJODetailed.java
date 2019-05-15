@@ -1,6 +1,6 @@
 package com.example.aleksei.repoinfo.model.pojo;
 
-public class ModelPOJODetailed {
+public class ModelPOJODetailed {//todo delet dis
 
     int subscribers_count;
     int forks;

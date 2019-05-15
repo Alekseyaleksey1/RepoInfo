@@ -3,7 +3,7 @@ package com.example.aleksei.repoinfo.model.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelPOJO {
+public class ModelPOJO {//todo delet dis
 
     List<ModelPOJOShort> arrayList;
 

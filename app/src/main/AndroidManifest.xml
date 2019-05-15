@@ -17,5 +17,6 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity android:name=".DetailedInfoActivity"></activity>
     </application>
 </manifest>

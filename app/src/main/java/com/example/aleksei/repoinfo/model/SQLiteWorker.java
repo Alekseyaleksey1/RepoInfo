@@ -22,8 +22,8 @@ public class SQLiteWorker {
     public static SQLiteWorker getInstance(Context appContext) {
         if (sqLiteWorker == null) {
             sqLiteWorker = new SQLiteWorker();
-            context = appContext;
         }
+        context = appContext;
         return sqLiteWorker;
     }
 
@@ -46,7 +46,7 @@ public class SQLiteWorker {
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-        ChiefPresenter.setupAdapter();
+        ChiefPresenter.setupAdapter(context);
     }
 
     public ArrayList<ModelPOJOShort> getDataFromDatabase() {//todo do this code in thread

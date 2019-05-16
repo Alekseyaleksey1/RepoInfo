@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.aleksei.repoinfo.ChiefPresenter;
+import com.example.aleksei.repoinfo.Notifier;
+import com.example.aleksei.repoinfo.RepositoriesActivity;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
 
 import java.util.ArrayList;
@@ -14,7 +16,8 @@ import java.util.List;
 
 public class SQLiteWorker {
     static SQLiteWorker sqLiteWorker;
-    static Context context;
+    //Context context;
+    static SQLiteTuner tuner;
 
     private SQLiteWorker() {
     }
@@ -23,13 +26,14 @@ public class SQLiteWorker {
         if (sqLiteWorker == null) {
             sqLiteWorker = new SQLiteWorker();
         }
-        context = appContext;
+        //context = appContext;
+        tuner = new SQLiteTuner(appContext, "db", null, 1);
         return sqLiteWorker;
     }
 
     public void saveDataToDatabase(List<ModelPOJOShort> shortData) {//todo do this code in thread
 
-        SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1);//todo put dbName in special class as static final
+        //SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1);//todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
         ContentValues contentValues;
         Log.i("saveDataToDatabase", "");
@@ -46,7 +50,9 @@ public class SQLiteWorker {
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-        ChiefPresenter.setupAdapter(context);
+        //Notifier.dataToDBSaved(context);
+        //ChiefPresenter.setupAdapter(context);
+        ChiefPresenter.setData(getDataFromDatabase());//todo model->presenter?
     }
 
     public ArrayList<ModelPOJOShort> getDataFromDatabase() {//todo do this code in thread
@@ -54,7 +60,7 @@ public class SQLiteWorker {
         ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
         //HashMap<String, String> hashMap;
 
-        SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1); //todo put dbName in special class as static final
+        //SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1); //todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
         Cursor cursor = db.query("dbTable", null, null, null, null, null, null);
 

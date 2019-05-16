@@ -21,11 +21,12 @@ import java.util.HashMap;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
 
-    ArrayList<ModelPOJOShort> arrayList;
+   public static ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
 
-    public RecyclerViewAdapter(ArrayList<ModelPOJOShort> arrayList) {
-        this.arrayList = arrayList;
-    }
+   /* public RecyclerViewAdapter(ArrayList<ModelPOJOShort> arrayList) {
+            this.arrayList = arrayList;
+
+    }*/
 
     @NonNull
     @Override
@@ -46,12 +47,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onClick(View v) {
-        int itemPosition = RepositoriesActivity.rvRepositories.getChildAdapterPosition(v);
+        //v.getContext().getSystemService()
+
+        /*int itemPosition = RepositoriesActivity.rvRepositories.getChildAdapterPosition(v);        //todo move this logic to Presenter
         Intent intent = new Intent(v.getContext(), DetailedInfoActivity.class);
         intent.putExtra("modelPOJO", arrayList.get(itemPosition));
-        v.getContext().startActivity(intent);
+        v.getContext().startActivity(intent);*/
 
-       // startDetailedInfoActivity(arrayList.get(itemPosition),v.getContext());
+        // startDetailedInfoActivity(arrayList.get(itemPosition),v.getContext());
     }
 
     public class RecycleViewHolder extends RecyclerView.ViewHolder {

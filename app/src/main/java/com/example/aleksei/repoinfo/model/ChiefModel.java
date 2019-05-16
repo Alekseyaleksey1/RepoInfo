@@ -28,25 +28,27 @@ public class ChiefModel {
         }
         return chiefModel;
     }
-//todo is DB existing? false - getDataFromInterner-saveDataToDatabase, true - getDataFromDatabase
 
     public void getDataFromInternet(final Context context) {
+
+
 
         RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<ModelPOJOShort>>() {
             @Override
             public void onResponse(Call<ArrayList<ModelPOJOShort>> call, Response<ArrayList<ModelPOJOShort>> response) {
                 arrayListShortResponce = response.body();
                 SQLiteWorker.getInstance(context).saveDataToDatabase(arrayListShortResponce);
+
             }
 
             @Override
             public void onFailure(Call<ArrayList<ModelPOJOShort>> call, Throwable t) {
-                //todo add downloading error message
+
             }
         });
+
     }
 
-    //TODO requesting of detailed data only on click of list item
     public static void getDetailedDataFromInternet(final Context context) {
         arrayListDetailedResponce = new ArrayList<>();
 

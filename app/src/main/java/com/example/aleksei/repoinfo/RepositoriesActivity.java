@@ -17,24 +17,33 @@ import java.util.HashMap;
 
 public class RepositoriesActivity extends Activity {
 
-    public static RecyclerView rvRepositories;
+    public RecyclerView rvRepositories;
+    static public RecyclerViewAdapter recyclerViewAdapter;
+    static ArrayList dataForShowing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repositories);
 
+
         initializeUI();
         ChiefPresenter.onUIReady(getApplicationContext());
     }
 
-
-
-
     void initializeUI() {
+
         rvRepositories = findViewById(R.id.rv_repositories);
         rvRepositories.setLayoutManager(new LinearLayoutManager(this));
+
+        dataForShowing = new ArrayList();
+        //recyclerViewAdapter = new RecyclerViewAdapter(dataForShowing);
+        recyclerViewAdapter = new RecyclerViewAdapter();
+        rvRepositories.setAdapter(recyclerViewAdapter);
+
+
     }
+
 
 
 }

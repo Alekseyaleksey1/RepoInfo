@@ -31,14 +31,11 @@ public class ChiefModel {
 
     public void getDataFromInternet(final Context context) {
 
-
-
         RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<ModelPOJOShort>>() {
             @Override
             public void onResponse(Call<ArrayList<ModelPOJOShort>> call, Response<ArrayList<ModelPOJOShort>> response) {
                 arrayListShortResponce = response.body();
                 SQLiteWorker.getInstance(context).saveDataToDatabase(arrayListShortResponce);
-
             }
 
             @Override
@@ -46,7 +43,6 @@ public class ChiefModel {
 
             }
         });
-
     }
 
     public static void getDetailedDataFromInternet(final Context context) {

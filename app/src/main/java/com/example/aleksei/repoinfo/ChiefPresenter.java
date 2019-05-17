@@ -1,9 +1,13 @@
 package com.example.aleksei.repoinfo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.aleksei.repoinfo.model.ChiefModel;
@@ -15,7 +19,6 @@ import java.util.ArrayList;
 
 
 public class ChiefPresenter {
-    //static Context context;
 
     public static boolean checkDBExists(Context appContext) {
 
@@ -32,12 +35,9 @@ public class ChiefPresenter {
     }
 
     public static void onUIReady(Context appContext) {
-        //context = appContext;
 
         if (checkDBExists(appContext)) {
             informDataReady(appContext);
-            //RepositoriesActivity.setupAdapter(SQLiteWorker.getInstance(appContext).getDataFromDatabase());
-
         } else {
             if (checkInternetAvailability(appContext)) {
                 ChiefModel.getInstance().getDataFromInternet(appContext);
@@ -45,11 +45,7 @@ public class ChiefPresenter {
             } else {
                 Toast.makeText(appContext, "DB is non existing and Internet is not avaliable", Toast.LENGTH_LONG).show();
             }
-
         }
-        //checkDBExists(appContext);
-        //checkInternetAvailability(appContext);
-        //ChiefModel.getInstance().getDataFromInternet(appContext);
     }
 
     public static void informDataReady(Context appContext) {
@@ -60,7 +56,16 @@ public class ChiefPresenter {
 
         RecyclerViewAdapter.arrayList = data;
         RepositoriesActivity.recyclerViewAdapter.notifyDataSetChanged();
-
     }
 
+    public static void onRecyclerViewItemClick(View clickedView) {
+
+        LayoutInflater inflater = (LayoutInflater) clickedView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.activity_repositories, null);
+        RecyclerView recyclerView = v.findViewById(R.id.rv_repositories);
+        int itemPosition = recyclerView.getChildAdapterPosition(clickedView);
+        Intent intent = new Intent(v.getContext(), DetailedInfoActivity.class);
+        intent.putExtra("modelPOJO", RecyclerViewAdapter.arrayList.get(itemPosition));
+        v.getContext().startActivity(intent);
+    }
 }

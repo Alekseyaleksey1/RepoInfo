@@ -16,7 +16,6 @@ import java.util.List;
 
 public class SQLiteWorker {
     static SQLiteWorker sqLiteWorker;
-    //Context context;
     static SQLiteTuner tuner;
 
     private SQLiteWorker() {
@@ -26,14 +25,12 @@ public class SQLiteWorker {
         if (sqLiteWorker == null) {
             sqLiteWorker = new SQLiteWorker();
         }
-        //context = appContext;
-        tuner = new SQLiteTuner(appContext, "db", null, 1);
+        tuner = new SQLiteTuner(appContext, "db", null, 1);//todo put dbName in special class as static final
         return sqLiteWorker;
     }
 
     public void saveDataToDatabase(List<ModelPOJOShort> shortData) {//todo do this code in thread
 
-        //SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1);//todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
         ContentValues contentValues;
         Log.i("saveDataToDatabase", "");
@@ -50,17 +47,12 @@ public class SQLiteWorker {
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-        //Notifier.dataToDBSaved(context);
-        //ChiefPresenter.setupAdapter(context);
         ChiefPresenter.setData(getDataFromDatabase());//todo model->presenter?
     }
 
     public ArrayList<ModelPOJOShort> getDataFromDatabase() {//todo do this code in thread
 
         ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
-        //HashMap<String, String> hashMap;
-
-        //SQLiteTuner tuner = new SQLiteTuner(context, "db", null, 1); //todo put dbName in special class as static final
         SQLiteDatabase db = tuner.getWritableDatabase();
         Cursor cursor = db.query("dbTable", null, null, null, null, null, null);
 
@@ -75,17 +67,6 @@ public class SQLiteWorker {
             int stargazerscountIndex = cursor.getColumnIndex("stargazerscount");
 
             do {
-                /*hashMap = new HashMap<>();
-                hashMap.put("id", String.valueOf(cursor.getInt(idIndex)));
-                hashMap.put("name", cursor.getString(nameIndex));
-                hashMap.put("fullName", cursor.getString(fullNameIndex));
-                hashMap.put("description", cursor.getString(descriptionIndex));
-                hashMap.put("url", cursor.getString(urlIndex));
-                hashMap.put("watcherscount", String.valueOf(cursor.getInt(watcherscountIndex)));
-                hashMap.put("forks", String.valueOf(cursor.getInt(forksIndex)));
-                hashMap.put("stargazerscount", String.valueOf(cursor.getInt(stargazerscountIndex)));
-                mapArrayList.add(hashMap);*/
-
                 ModelPOJOShort pojoShort = new ModelPOJOShort();
                 pojoShort.setId(cursor.getInt(idIndex));
                 pojoShort.setName(cursor.getString(nameIndex));
@@ -95,14 +76,12 @@ public class SQLiteWorker {
                 pojoShort.setWatchers_count(cursor.getInt(watcherscountIndex));
                 pojoShort.setForks(cursor.getInt(forksIndex));
                 pojoShort.setStargazers_count(cursor.getInt(stargazerscountIndex));
-
                 arrayList.add(pojoShort);
             } while (cursor.moveToNext());
         } else {
             Log.d("DBTable", "0 rows");
         }
         tuner.close();
-
         return arrayList;
     }
 }

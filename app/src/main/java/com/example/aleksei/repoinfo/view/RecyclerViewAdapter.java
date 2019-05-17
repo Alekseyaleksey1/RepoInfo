@@ -23,11 +23,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
    public static ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
 
-   /* public RecyclerViewAdapter(ArrayList<ModelPOJOShort> arrayList) {
-            this.arrayList = arrayList;
-
-    }*/
-
     @NonNull
     @Override
     public RecycleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -47,14 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onClick(View v) {
-        //v.getContext().getSystemService()
-
-        /*int itemPosition = RepositoriesActivity.rvRepositories.getChildAdapterPosition(v);        //todo move this logic to Presenter
-        Intent intent = new Intent(v.getContext(), DetailedInfoActivity.class);
-        intent.putExtra("modelPOJO", arrayList.get(itemPosition));
-        v.getContext().startActivity(intent);*/
-
-        // startDetailedInfoActivity(arrayList.get(itemPosition),v.getContext());
+        ChiefPresenter.onRecyclerViewItemClick(v);
     }
 
     public class RecycleViewHolder extends RecyclerView.ViewHolder {

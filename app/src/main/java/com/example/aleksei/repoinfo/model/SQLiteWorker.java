@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.aleksei.repoinfo.ChiefPresenter;
-import com.example.aleksei.repoinfo.Notifier;
-import com.example.aleksei.repoinfo.RepositoriesActivity;
 import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
 
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.List;
 public class SQLiteWorker {
     static SQLiteWorker sqLiteWorker;
     static SQLiteTuner tuner;
+    DataPresentInDBCallback callback;
 
     private SQLiteWorker() {
     }
@@ -27,6 +25,14 @@ public class SQLiteWorker {
         }
         tuner = new SQLiteTuner(appContext, "db", null, 1);//todo put dbName in special class as static final
         return sqLiteWorker;
+    }
+
+    public void registerForCallback(DataPresentInDBCallback callback) {
+        this.callback = callback;
+    }
+
+    public interface DataPresentInDBCallback {
+        void onDataInDBPresent();
     }
 
     public void saveDataToDatabase(List<ModelPOJOShort> shortData) {//todo do this code in thread
@@ -47,8 +53,10 @@ public class SQLiteWorker {
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-        ChiefPresenter.setData(getDataFromDatabase());//todo model->presenter?
+        //ChiefPresenter.setData(getDataFromDatabase());
+        callback.onDataInDBPresent();
     }
+
 
     public ArrayList<ModelPOJOShort> getDataFromDatabase() {//todo do this code in thread
 
@@ -84,4 +92,6 @@ public class SQLiteWorker {
         tuner.close();
         return arrayList;
     }
+
+
 }

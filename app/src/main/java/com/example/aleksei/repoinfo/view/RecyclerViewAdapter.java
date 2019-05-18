@@ -21,7 +21,16 @@ import java.util.HashMap;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
 
-   public static ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
+    public static ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
+    ItemClickedInAdapterCallback callback;
+
+    public void registerForCallback(ItemClickedInAdapterCallback callback) {
+        this.callback = callback;
+    }
+
+    public interface ItemClickedInAdapterCallback {
+        void onItemClicked(View v);
+    }
 
     @NonNull
     @Override
@@ -42,7 +51,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onClick(View v) {
-        ChiefPresenter.onRecyclerViewItemClick(v);
+        //RepositoriesActivity.onRecyclerViewItemClick(v);
+        callback.onItemClicked(v);
     }
 
     public class RecycleViewHolder extends RecyclerView.ViewHolder {
@@ -70,4 +80,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         intent.putExtra("modelPOJO", modelPOJO);
         context.startActivity(intent);
     }*/
+
+    public static void setDataToAdapter(ArrayList<ModelPOJOShort> arrayList) {
+        RecyclerViewAdapter.arrayList = arrayList;
+    }
 }

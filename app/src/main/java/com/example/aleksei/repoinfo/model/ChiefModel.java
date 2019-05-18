@@ -15,9 +15,9 @@ import retrofit2.Response;
 
 public class ChiefModel {
 
-    static List<ModelPOJOShort> arrayListShortResponce;
-    static List<ModelPOJODetailed> arrayListDetailedResponce;
+    //static List<ModelPOJODetailed> arrayListDetailedResponce;
     static ChiefModel chiefModel;
+    List<ModelPOJOShort> arrayListShortResponce;
 
     private ChiefModel() {
     }
@@ -45,7 +45,7 @@ public class ChiefModel {
         });
     }
 
-    public static void getDetailedDataFromInternet(final Context context) {
+    /*public  void getDetailedDataFromInternet(final Context context) {
         arrayListDetailedResponce = new ArrayList<>();
 
         for (int i = 0; i < arrayListShortResponce.size(); i++) {
@@ -61,5 +61,5 @@ public class ChiefModel {
                 }
             });
         }
-    }
+    }*/
 }

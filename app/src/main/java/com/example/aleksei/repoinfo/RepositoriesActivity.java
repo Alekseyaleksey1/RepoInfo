@@ -16,30 +16,27 @@ import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*Условия:
-        	minApi 15
+/*Условия:  minApi 15
         	произвольный дизайн
         	использование фрагментов
         	все ориентации экрана
         	любая база данных или обертка для базы данных
         	без доступа к интернет соединению, показывать только данные из базы
         	поддержка всех плотностей экрана
-
         Цель:
         Создать приложение, которое делает http запросы на официальный GitHub API, сохраняет данные в базу данных, и показывает в интерфейсе.
         Документация - https://developer.github.com/v3/repos/
         Что загружать - список репозиториев https://github.com/square
-
         Как показывать:
         Первый экран - список репозиториев. В каждой ячейке списка - название репозитория, количество звезд, форков и watch-ей.
         По клику на репозиторий переход на второй экран - детали репозитория. Полное название, описание, url, количественные показатели, количество коммитов + (еще что нибудь по желанию).*/
 
-
 public class RepositoriesActivity extends Activity {
 
-    public RecyclerView rvRepositories;
     static public RecyclerViewAdapter recyclerViewAdapter;
-    static ArrayList dataForShowing;
+    public RecyclerView rvRepositories;
+    ArrayList dataForShowing;
+    ChiefPresenter chiefPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +44,7 @@ public class RepositoriesActivity extends Activity {
         setContentView(R.layout.activity_repositories);
 
         initializeUI();
-        ChiefPresenter.onUIReady(getApplicationContext());
+        chiefPresenter.onUIReady(this);
     }
 
     void initializeUI() {
@@ -57,15 +54,14 @@ public class RepositoriesActivity extends Activity {
         dataForShowing = new ArrayList();
         recyclerViewAdapter = new RecyclerViewAdapter();
         rvRepositories.setAdapter(recyclerViewAdapter);
+        chiefPresenter = new ChiefPresenter();
+    }
 
+    void showLoadingWindow() {
 
     }
 
-    static void showLoadingWindow() {
-
-    }
-
-    static void hideLoadingWindow() {
+    void hideLoadingWindow() {
 
     }
 

@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,29 +14,39 @@ import com.example.aleksei.repoinfo.model.SQLiteWorker;
 import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 
 import java.io.File;
-import java.util.ArrayList;
 
 
-public class ChiefPresenter {
+public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, RecyclerViewAdapter.ItemClickedInAdapterCallback {
 
-    public static boolean checkDBExists(Context appContext) {
+    RepositoriesActivity activityInstance;
+    //public static ArrayList data;
+
+    public boolean checkDBExists(Context appContext) {
 
         File dbFile = appContext.getDatabasePath("db");
         Log.i("checkDBExists", String.valueOf(dbFile.exists()));
         return dbFile.exists();
     }
 
-    public static boolean checkInternetAvailability(Context appContext) {
+    public boolean checkInternetAvailability(Context appContext) {
+
         ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         Log.i("checkInternet", String.valueOf(networkInfo != null && networkInfo.isConnected()));
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    public static void onUIReady(Context appContext) {
+    public void onUIReady(RepositoriesActivity activityInstance) {
+
+        this.activityInstance = activityInstance;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
+        Context appContext = this.activityInstance.getApplicationContext();
+        SQLiteWorker.getInstance(appContext).registerForCallback(this);
+        RepositoriesActivity.recyclerViewAdapter.registerForCallback(this);
+        activityInstance.showLoadingWindow();
 
         if (checkDBExists(appContext)) {
-            informDataReady(appContext);
+            //informDataReady(appContext);
+            onDataInDBPresent();
         } else {
             if (checkInternetAvailability(appContext)) {
                 ChiefModel.getInstance().getDataFromInternet(appContext);
@@ -48,24 +57,52 @@ public class ChiefPresenter {
         }
     }
 
-    public static void informDataReady(Context appContext) {
-        setData(SQLiteWorker.getInstance(appContext).getDataFromDatabase());
-    }
+    @Override
+    public void onDataInDBPresent() {
 
-    public static void setData(ArrayList data) {
-
-        RecyclerViewAdapter.arrayList = data;
+        //setData(SQLiteWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase());
+        RecyclerViewAdapter.setDataToAdapter(SQLiteWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase());
+        // RecyclerViewAdapter.arrayList = data;//
         RepositoriesActivity.recyclerViewAdapter.notifyDataSetChanged();
+        activityInstance.hideLoadingWindow();
+
     }
 
-    public static void onRecyclerViewItemClick(View clickedView) {
+    @Override
+    public void onItemClicked(View v) {
 
-        LayoutInflater inflater = (LayoutInflater) clickedView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.activity_repositories, null);
-        RecyclerView recyclerView = v.findViewById(R.id.rv_repositories);
-        int itemPosition = recyclerView.getChildAdapterPosition(clickedView);
-        Intent intent = new Intent(v.getContext(), DetailedInfoActivity.class);
+        RecyclerView recyclerView = activityInstance.findViewById(R.id.rv_repositories);
+        int itemPosition = recyclerView.getChildAdapterPosition(v);
+        Intent intent = new Intent(activityInstance.getApplicationContext(), DetailedInfoActivity.class);
         intent.putExtra("modelPOJO", RecyclerViewAdapter.arrayList.get(itemPosition));
-        v.getContext().startActivity(intent);
+        activityInstance.startActivity(intent);
+
     }
+
+    /*public void informDataReady(Context appContext) {
+        setData(SQLiteWorker.getInstance(appContext).getDataFromDatabase());
+    }*/
+
+   /* public void setData(ArrayList data) {
+
+        RecyclerViewAdapter.setDataToAdapter(data);
+       // RecyclerViewAdapter.arrayList = data;//
+        RepositoriesActivity.recyclerViewAdapter.notifyDataSetChanged();
+        activityInstance.hideLoadingWindow();
+    }*/
+
+    /*public void onRecyclerViewItemClick(View clickedView) {
+
+        //LayoutInflater inflater = (LayoutInflater) clickedView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //View v = inflater.inflate(R.layout.activity_repositories, null);
+
+
+        RecyclerView recyclerView = activityInstance.findViewById(R.id.rv_repositories);
+        int itemPosition = recyclerView.getChildAdapterPosition(clickedView);
+        Intent intent = new Intent(activityInstance.getApplicationContext(), DetailedInfoActivity.class);
+        intent.putExtra("modelPOJO", RecyclerViewAdapter.arrayList.get(itemPosition));
+        activityInstance.startActivity(intent);
+    }*/
+
+
 }

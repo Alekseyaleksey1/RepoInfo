@@ -13,7 +13,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChiefModel {
+public class ChiefModel {//todo combine ChiefModel and SQLiteWorker in one class ChiefModel
 
     //static List<ModelPOJODetailed> arrayListDetailedResponce;
     static ChiefModel chiefModel;

@@ -1,5 +1,6 @@
 package com.example.aleksei.repoinfo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -36,13 +37,15 @@ public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, Rec
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    public void onUIReady(RepositoriesActivity activityInstance) {
+    public void onUIReady(Activity activity) {
 
-        this.activityInstance = activityInstance;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
+
+        activityInstance = (RepositoriesActivity) activity;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
+        //activityInstance.showLoading();
         Context appContext = this.activityInstance.getApplicationContext();
         SQLiteWorker.getInstance(appContext).registerForCallback(this);
         RepositoriesActivity.recyclerViewAdapter.registerForCallback(this);
-        activityInstance.showLoadingWindow();
+
 
         if (checkDBExists(appContext)) {
             //informDataReady(appContext);
@@ -64,18 +67,20 @@ public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, Rec
         RecyclerViewAdapter.setDataToAdapter(SQLiteWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase());
         // RecyclerViewAdapter.arrayList = data;//
         RepositoriesActivity.recyclerViewAdapter.notifyDataSetChanged();
-        activityInstance.hideLoadingWindow();
+        activityInstance.hideLoading();
 
     }
 
     @Override
     public void onItemClicked(View v) {
 
-        RecyclerView recyclerView = activityInstance.findViewById(R.id.rv_repositories);
+        RecyclerView recyclerView = activityInstance.findViewById(R.id.fragment_repositories_rv);
         int itemPosition = recyclerView.getChildAdapterPosition(v);
-        Intent intent = new Intent(activityInstance.getApplicationContext(), DetailedInfoActivity.class);
+
+        activityInstance.detailedInfoFragment.fullName.setText(RecyclerViewAdapter.arrayList.get(itemPosition).getFull_name());
+        /*Intent intent = new Intent(activityInstance.getApplicationContext(), DetailedInfoActivity.class);
         intent.putExtra("modelPOJO", RecyclerViewAdapter.arrayList.get(itemPosition));
-        activityInstance.startActivity(intent);
+        activityInstance.startActivity(intent);*/
 
     }
 
@@ -88,7 +93,7 @@ public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, Rec
         RecyclerViewAdapter.setDataToAdapter(data);
        // RecyclerViewAdapter.arrayList = data;//
         RepositoriesActivity.recyclerViewAdapter.notifyDataSetChanged();
-        activityInstance.hideLoadingWindow();
+        activityInstance.hideLoading();
     }*/
 
     /*public void onRecyclerViewItemClick(View clickedView) {

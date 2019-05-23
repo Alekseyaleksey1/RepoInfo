@@ -15,7 +15,7 @@ public class DetailedInfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
 
-        tvFullName = findViewById(R.id.tvFullName);
+        tvFullName = findViewById(R.id.activity_detailed_tv_fullname);
 
         ModelPOJOShort pojoShort = getIntent().getExtras().getParcelable("modelPOJO");
 

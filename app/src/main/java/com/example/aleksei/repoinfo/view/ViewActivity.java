@@ -1,19 +1,18 @@
-package com.example.aleksei.repoinfo;
+package com.example.aleksei.repoinfo.view;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
-import java.util.ArrayList;
+import com.example.aleksei.repoinfo.presenter.ChiefPresenter;
+import com.example.aleksei.repoinfo.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /*Условия:  minApi 15
         	произвольный дизайн
@@ -30,58 +29,37 @@ import java.util.ArrayList;
         Первый экран - список репозиториев. В каждой ячейке списка - название репозитория, количество звезд, форков и watch-ей.
         По клику на репозиторий переход на второй экран - детали репозитория. Полное название, описание, url, количественные показатели, количество коммитов + (еще что нибудь по желанию).*/
 
-public class RepositoriesActivity extends FragmentActivity {
+public class ViewActivity extends FragmentActivity {
 
-    static public RecyclerViewAdapter recyclerViewAdapter;
-    //public RecyclerView rvRepositories;
-    //ArrayList dataForShowing;
-    static ChiefPresenter chiefPresenter;
+    @BindView(R.id.activity_repositories_pb)
     ProgressBar progressBar;
-    RepositoriesFragment repositoriesFragment;
-    DetailedInfoFragment detailedInfoFragment;
+    @BindView(R.id.activity_view_ll)
+    LinearLayout ll;
+
+    public static ChiefPresenter chiefPresenter;
+    public RepositoriesFragment repositoriesFragment;
+    public DetailedInfoFragment detailedInfoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_repositories);
-
+        setContentView(R.layout.activity_view);
         initializeUI();
-
-
-        //chiefPresenter.onUIReady(this);
     }
 
-
-
-    void initializeUI() {
-
-
-        progressBar = findViewById(R.id.activity_repositories_pb);
+    private void initializeUI() {
+        ButterKnife.bind(this);
+        //progressBar = findViewById(R.id.activity_repositories_pb);
+        //ll = findViewById(R.id.activity_view_ll);
         showLoading();
-
-
-
-        //rvRepositories = findViewById(R.id.fragment_repositories_rv);
-        //repositoriesFragment.repoFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //dataForShowing = new ArrayList();
-        //recyclerViewAdapter = new RecyclerViewAdapter();
-        //repositoriesFragment.repoFragmentRecyclerView.setAdapter(recyclerViewAdapter);
         chiefPresenter = new ChiefPresenter();
+
         setupFragments();
-
-        /*FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.*/
-
-        //ConstraintLayout. В нем LinearLayout и ProgressBar. В LinearLayout два FrameLayout. В них фрагменты ListFragment, DetailedInfoFragment.
-        //Запускается апп, пошла загрузка, показываю ProgressBar, скрываю фрагменты. Загрузились данные - скрываю ProgressBar, показываю фрагменты
     }
 
-
-    void setupFragments(){
+    private void setupFragments() {
         repositoriesFragment = new RepositoriesFragment();
         detailedInfoFragment = new DetailedInfoFragment();
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
@@ -89,17 +67,18 @@ public class RepositoriesActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
 
-    void showLoading() {
+    public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
-        LinearLayout ll = findViewById(R.id.linearLayout);
         ll.setVisibility(View.INVISIBLE);
     }
 
-    void hideLoading() {
+    public void hideLoading() {
         progressBar.setVisibility(View.INVISIBLE);
-        LinearLayout ll = findViewById(R.id.linearLayout);
         ll.setVisibility(View.VISIBLE);
     }
 
+    public void showInternetError() {
+
+    }
 
 }

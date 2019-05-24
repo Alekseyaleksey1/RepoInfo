@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
+import com.example.aleksei.repoinfo.model.pojo.POJOModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class SQLiteWorker {
         void onDataInDBPresent();
     }
 
-    public void saveDataToDatabase(List<ModelPOJOShort> shortData) {//todo do this code in thread
+    public void saveDataToDatabase(List<POJOModel> shortData) {//todo do this code in thread
 
         SQLiteDatabase db = tuner.getWritableDatabase();
         ContentValues contentValues;
@@ -44,23 +44,21 @@ public class SQLiteWorker {
             contentValues = new ContentValues();
             contentValues.put("id", shortData.get(i).getId());
             contentValues.put("name", shortData.get(i).getName());
-            contentValues.put("fullName", shortData.get(i).getFull_name());
+            contentValues.put("fullName", shortData.get(i).getFullName());
             contentValues.put("description", shortData.get(i).getDescription());
             contentValues.put("url", shortData.get(i).getUrl());
-            contentValues.put("watcherscount", shortData.get(i).getWatchers_count());
+            contentValues.put("watcherscount", shortData.get(i).getWatchersCount());
             contentValues.put("forks", shortData.get(i).getForks());
-            contentValues.put("stargazerscount", shortData.get(i).getStargazers_count());
+            contentValues.put("stargazerscount", shortData.get(i).getStargazersCount());
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();
-        //ChiefPresenter.setData(getDataFromDatabase());
         callback.onDataInDBPresent();
     }
 
+    public ArrayList<POJOModel> getDataFromDatabase() {//todo do this code in thread
 
-    public ArrayList<ModelPOJOShort> getDataFromDatabase() {//todo do this code in thread
-
-        ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
+        ArrayList<POJOModel> arrayList = new ArrayList<>();
         SQLiteDatabase db = tuner.getWritableDatabase();
         Cursor cursor = db.query("dbTable", null, null, null, null, null, null);
 
@@ -75,15 +73,15 @@ public class SQLiteWorker {
             int stargazerscountIndex = cursor.getColumnIndex("stargazerscount");
 
             do {
-                ModelPOJOShort pojoShort = new ModelPOJOShort();
+                POJOModel pojoShort = new POJOModel();
                 pojoShort.setId(cursor.getInt(idIndex));
                 pojoShort.setName(cursor.getString(nameIndex));
-                pojoShort.setFull_name(cursor.getString(fullNameIndex));
+                pojoShort.setFullName(cursor.getString(fullNameIndex));
                 pojoShort.setDescription(cursor.getString(descriptionIndex));
                 pojoShort.setUrl(cursor.getString(urlIndex));
-                pojoShort.setWatchers_count(cursor.getInt(watcherscountIndex));
+                pojoShort.setWatchersCount(cursor.getInt(watcherscountIndex));
                 pojoShort.setForks(cursor.getInt(forksIndex));
-                pojoShort.setStargazers_count(cursor.getInt(stargazerscountIndex));
+                pojoShort.setStargazersCount(cursor.getInt(stargazerscountIndex));
                 arrayList.add(pojoShort);
             } while (cursor.moveToNext());
         } else {
@@ -92,6 +90,4 @@ public class SQLiteWorker {
         tuner.close();
         return arrayList;
     }
-
-
 }

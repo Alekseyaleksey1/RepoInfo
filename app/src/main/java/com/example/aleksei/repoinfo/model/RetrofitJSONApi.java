@@ -1,7 +1,7 @@
 package com.example.aleksei.repoinfo.model;
 
-import com.example.aleksei.repoinfo.model.pojo.ModelPOJODetailed;
-import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
+import com.example.aleksei.repoinfo.model.pojo.POJOModelDetailed;
+import com.example.aleksei.repoinfo.model.pojo.POJOModel;
 
 import java.util.ArrayList;
 
@@ -12,8 +12,8 @@ import retrofit2.http.Path;
 public interface RetrofitJSONApi {
 
     @GET("orgs/square/repos?sort=pushed")
-    Call<ArrayList<ModelPOJOShort>> getData();
+    Call<ArrayList<POJOModel>> getData();
 
-   @GET("repos/{fullName}")
-    Call<ModelPOJODetailed> getDetailedData(@Path("fullName") String fullName);
+    @GET("repos/{fullName}")
+    Call<POJOModelDetailed> getDetailedData(@Path("fullName") String fullName);
 }

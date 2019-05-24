@@ -12,12 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".RepositoriesActivity">
+        <activity android:name=".view.ViewActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailedInfoActivity"></activity>
     </application>
 </manifest>

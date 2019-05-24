@@ -1,7 +1,6 @@
 package com.example.aleksei.repoinfo.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,19 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.aleksei.repoinfo.ChiefPresenter;
-import com.example.aleksei.repoinfo.DetailedInfoActivity;
 import com.example.aleksei.repoinfo.R;
-import com.example.aleksei.repoinfo.RepositoriesActivity;
-import com.example.aleksei.repoinfo.model.ChiefModel;
-import com.example.aleksei.repoinfo.model.pojo.ModelPOJOShort;
+import com.example.aleksei.repoinfo.model.pojo.POJOModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
 
-    public static ArrayList<ModelPOJOShort> arrayList = new ArrayList<>();
+    public static ArrayList<POJOModel> arrayList = new ArrayList<>();
     ItemClickedInAdapterCallback callback;
 
     public void registerForCallback(ItemClickedInAdapterCallback callback) {
@@ -44,14 +38,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecycleViewHolder recycleViewHolder, int i) {
         recycleViewHolder.list_item_tv_repositoryname.setText(arrayList.get(i).getName());
-        recycleViewHolder.list_item_tv_starsnumber.setText(String.valueOf(arrayList.get(i).getStargazers_count()));
+        recycleViewHolder.list_item_tv_starsnumber.setText(String.valueOf(arrayList.get(i).getStargazersCount()));
         recycleViewHolder.list_item_tv_forksnumber.setText(String.valueOf(arrayList.get(i).getForks()));
-        recycleViewHolder.list_item_tv_watchesnumber.setText(String.valueOf(arrayList.get(i).getWatchers_count()));
+        recycleViewHolder.list_item_tv_watchesnumber.setText(String.valueOf(arrayList.get(i).getWatchersCount()));
     }
 
     @Override
     public void onClick(View v) {
-        //RepositoriesActivity.onRecyclerViewItemClick(v);
         callback.onItemClicked(v);
     }
 
@@ -75,13 +68,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return arrayList.size();
     }
 
-    /*public void startDetailedInfoActivity(ModelPOJOShort modelPOJO, Context context) {
-        Intent intent = new Intent(context, DetailedInfoActivity.class);
-        intent.putExtra("modelPOJO", modelPOJO);
-        context.startActivity(intent);
-    }*/
-
-    public static void setDataToAdapter(ArrayList<ModelPOJOShort> arrayList) {
+    public static void setDataToAdapter(ArrayList<POJOModel> arrayList) {
         RecyclerViewAdapter.arrayList = arrayList;
     }
 }

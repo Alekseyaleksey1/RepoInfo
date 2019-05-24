@@ -2,7 +2,7 @@ package com.example.aleksei.repoinfo.model;
 
 import android.content.Context;
 
-import com.example.aleksei.repoinfo.model.pojo.POJOModel;
+import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChiefModel {//todo combine ChiefModel and SQLiteWorker in one class ChiefModel
+public class ChiefModel {//todo combine ChiefModel and DatabaseWorker in one class ChiefModel
 
     static ChiefModel chiefModel;
-    List<POJOModel> arrayListShortResponce;
+    List<RepositoryModel> arrayListShortResponce;
 
     private ChiefModel() {
     }
@@ -28,15 +28,15 @@ public class ChiefModel {//todo combine ChiefModel and SQLiteWorker in one class
 
     public void getDataFromInternet(final Context context) {
 
-        RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<POJOModel>>() {
+        RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<RepositoryModel>>() {
             @Override
-            public void onResponse(Call<ArrayList<POJOModel>> call, Response<ArrayList<POJOModel>> response) {
+            public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
                 arrayListShortResponce = response.body();
-                SQLiteWorker.getInstance(context).saveDataToDatabase(arrayListShortResponce);
+                DatabaseWorker.getInstance(context).saveDataToDatabase(arrayListShortResponce);
             }
 
             @Override
-            public void onFailure(Call<ArrayList<POJOModel>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<RepositoryModel>> call, Throwable t) {
 
             }
         });

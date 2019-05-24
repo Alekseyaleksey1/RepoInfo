@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.aleksei.repoinfo.R;
 import com.example.aleksei.repoinfo.model.ChiefModel;
-import com.example.aleksei.repoinfo.model.SQLiteWorker;
+import com.example.aleksei.repoinfo.model.DatabaseWorker;
 import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 import com.example.aleksei.repoinfo.view.RepositoriesFragment;
 import com.example.aleksei.repoinfo.view.ViewActivity;
@@ -19,7 +19,7 @@ import com.example.aleksei.repoinfo.view.ViewActivity;
 import java.io.File;
 
 
-public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, RecyclerViewAdapter.ItemClickedInAdapterCallback {
+public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, DatabaseWorker.DataRetrievedFromDBCallback, RecyclerViewAdapter.ItemClickedInAdapterCallback {
 
     ViewActivity activityInstance;
 
@@ -42,7 +42,8 @@ public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, Rec
 
         activityInstance = (ViewActivity) activity;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
         Context appContext = this.activityInstance.getApplicationContext();
-        SQLiteWorker.getInstance(appContext).registerForCallback(this);
+        DatabaseWorker.getInstance(appContext).registerForDataPresentCallback(this);
+        DatabaseWorker.getInstance(appContext).registerForDataRetrievedCallback(this);
         RepositoriesFragment.recyclerViewAdapter.registerForCallback(this);
 
         if (checkDBExists(appContext)) {
@@ -59,7 +60,14 @@ public class ChiefPresenter implements SQLiteWorker.DataPresentInDBCallback, Rec
     @Override
     public void onDataInDBPresent() {
 
-        RecyclerViewAdapter.setDataToAdapter(SQLiteWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase());
+        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase();
+       /* RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();
+        activityInstance.hideLoading();*/
+    }
+
+    @Override
+    public void onDataFromDBRetrieved() {
+        RecyclerViewAdapter.setDataToAdapter(DatabaseWorker.dataToRetrieve);
         RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();
         activityInstance.hideLoading();
     }

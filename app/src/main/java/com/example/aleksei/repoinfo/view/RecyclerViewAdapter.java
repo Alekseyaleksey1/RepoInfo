@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aleksei.repoinfo.R;
-import com.example.aleksei.repoinfo.model.pojo.POJOModel;
+import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
 
-    public static ArrayList<POJOModel> arrayList = new ArrayList<>();
+    public static ArrayList<RepositoryModel> arrayList = new ArrayList<>();
     ItemClickedInAdapterCallback callback;
 
     public void registerForCallback(ItemClickedInAdapterCallback callback) {
@@ -68,7 +68,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return arrayList.size();
     }
 
-    public static void setDataToAdapter(ArrayList<POJOModel> arrayList) {
+    public static void setDataToAdapter(ArrayList<RepositoryModel> arrayList) {
         RecyclerViewAdapter.arrayList = arrayList;
     }
 }

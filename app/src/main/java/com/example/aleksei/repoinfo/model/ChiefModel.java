@@ -11,7 +11,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChiefModel {//todo combine ChiefModel and DatabaseWorker in one class ChiefModel
+public class ChiefModel {//todo delet dis
 
     static ChiefModel chiefModel;
     List<RepositoryModel> arrayListShortResponce;

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
 
+
     public static ArrayList<RepositoryModel> arrayList = new ArrayList<>();
     ItemClickedInAdapterCallback callback;
 

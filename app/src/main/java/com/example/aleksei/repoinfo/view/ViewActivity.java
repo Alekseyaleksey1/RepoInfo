@@ -29,6 +29,14 @@ import butterknife.ButterKnife;
         Первый экран - список репозиториев. В каждой ячейке списка - название репозитория, количество звезд, форков и watch-ей.
         По клику на репозиторий переход на второй экран - детали репозитория. Полное название, описание, url, количественные показатели, количество коммитов + (еще что нибудь по желанию).*/
 
+
+//добавить (при смене ориентации экрана)
+//сохранение позиции скролла списка
+//сохранение выбранноно эл-та списка
+//
+//
+//
+
 public class ViewActivity extends FragmentActivity {
 
     @BindView(R.id.activity_repositories_pb)
@@ -45,6 +53,8 @@ public class ViewActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
         initializeUI();
+
+
     }
 
     private void initializeUI() {
@@ -62,8 +72,8 @@ public class ViewActivity extends FragmentActivity {
         detailedInfoFragment = new DetailedInfoFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
-        fragmentTransaction.add(R.id.activity_repositories_fl_fragment_detailed, detailedInfoFragment);
+        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
+        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_detailed, detailedInfoFragment);
         fragmentTransaction.commit();
     }
 

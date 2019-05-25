@@ -9,12 +9,17 @@ import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DatabaseWorker {
     static private DatabaseWorker databaseWorker;
-    //static SQLiteTuner tuner;
     static private AppDatabase db;
+    public List<RepositoryModel> arrayListShortResponce;
     static private DataPresentInDBCallback dataPresentInDBCallback;
     static private DataRetrievedFromDBCallback dataRetrievedFromDBCallback;
+    static private DataLoadedFromInternetCallback dataLoadedFromInternetCallback;
     public static ArrayList<RepositoryModel> dataToRetrieve;
 
 
@@ -25,9 +30,6 @@ public class DatabaseWorker {
         if (databaseWorker == null) {
             databaseWorker = new DatabaseWorker();
         }
-
-        //tuner = new SQLiteTuner(appContext, "db", null, 1);//todo put dbName in special class as static final
-
         db = Room.databaseBuilder(appContext, AppDatabase.class, "db").allowMainThreadQueries().build();
         return databaseWorker;
     }
@@ -36,19 +38,45 @@ public class DatabaseWorker {
         dataPresentInDBCallback = callback;
     }
 
-    public void registerForDataRetrievedCallback(DataRetrievedFromDBCallback callback){
+    public void registerForDataRetrievedCallback(DataRetrievedFromDBCallback callback) {
         dataRetrievedFromDBCallback = callback;
+    }
+
+    public void registerForDataLoadedCallback(DataLoadedFromInternetCallback callback) {
+        dataLoadedFromInternetCallback = callback;
     }
 
     public interface DataPresentInDBCallback {
         void onDataInDBPresent();
     }
-    
-    public interface DataRetrievedFromDBCallback{
+
+    public interface DataRetrievedFromDBCallback {
         void onDataFromDBRetrieved();
     }
 
-    public void saveDataToDatabase(List<RepositoryModel> repositoriesList) {//todo do this code in thread
+    public interface DataLoadedFromInternetCallback {
+        void onDataFromInternetLoaded();
+    }
+
+
+    public void getDataFromInternet() {
+
+        RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<RepositoryModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
+                arrayListShortResponce = response.body();
+                dataLoadedFromInternetCallback.onDataFromInternetLoaded();
+                //saveDataToDatabase(arrayListShortResponce);//todo callback
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<RepositoryModel>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void saveDataToDatabase(List<RepositoryModel> repositoriesList) {
 
         AsyncSaver saver = new AsyncSaver();
         saver.execute(repositoriesList);
@@ -77,7 +105,7 @@ public class DatabaseWorker {
         //dataPresentInDBCallback.onDataInDBPresent();
     }
 
-    public void getDataFromDatabase() {//todo do this code in thread
+    public void getDataFromDatabase() {
         AsyncGetter asyncGetter = new AsyncGetter();
         asyncGetter.execute();
 
@@ -115,7 +143,7 @@ public class DatabaseWorker {
         tuner.close();*/
     }
 
-    static class AsyncSaver extends AsyncTask<List<RepositoryModel>, Void, Void>{
+    static class AsyncSaver extends AsyncTask<List<RepositoryModel>, Void, Void> {
 
         @Override
         protected Void doInBackground(List<RepositoryModel>... lists) {
@@ -132,13 +160,13 @@ public class DatabaseWorker {
         }
     }
 
-    static class AsyncGetter extends AsyncTask<Void, Void, ArrayList<RepositoryModel>>{
+    static class AsyncGetter extends AsyncTask<Void, Void, ArrayList<RepositoryModel>> {
 
         @Override
         protected ArrayList<RepositoryModel> doInBackground(Void... voids) {
             return (ArrayList<RepositoryModel>) db.getRepositoryDao().getAll();
         }
-        
+
         @Override
         protected void onPostExecute(ArrayList<RepositoryModel> repositories) {
             super.onPostExecute(repositories);

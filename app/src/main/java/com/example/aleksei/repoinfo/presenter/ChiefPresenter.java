@@ -111,15 +111,16 @@ public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, D
 
 
 
-    public void setReceiver() {
+    public void setReceiver(ViewActivity viewActivity) {
         receiver = new IntentReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("IntentReceiver");
-        LocalBroadcastManager.getInstance(activityInstance.getApplicationContext()).registerReceiver(receiver, intentFilter);
+        intentFilter.addAction("saveDataToDatabase");
+        intentFilter.addAction("getDataFromDatabase");
+        LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).registerReceiver(receiver, intentFilter);
     }
 
-    public void removeReceiver(){
-        LocalBroadcastManager.getInstance(activityInstance.getApplicationContext()).unregisterReceiver(receiver);
+    public void removeReceiver(ViewActivity viewActivity){
+        LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).unregisterReceiver(receiver);
     }
 }
 

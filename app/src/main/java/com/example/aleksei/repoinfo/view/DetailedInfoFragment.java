@@ -20,7 +20,6 @@ public class DetailedInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_detailed, null);
-
         tvFullName = view.findViewById(R.id.fragment_detailed_tv_fullname);
 
         return view;
@@ -28,5 +27,30 @@ public class DetailedInfoFragment extends Fragment {
 
     public void setFullName(String fullName) {
         tvFullName.setText(fullName);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("fullName", tvFullName.getText().toString());
+
+    }
+
+   /* @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            tvFullName.setText(savedInstanceState.getString("fullName"));
+        }
+    }*/
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            tvFullName.setText(savedInstanceState.getString("fullName"));
+        }
     }
 }

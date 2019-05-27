@@ -35,7 +35,11 @@ public class AsyncIntent extends IntentService {
                 for (RepositoryModel repository : repositoriesList) {
                     DatabaseWorker.db.getRepositoryDao().insert(repository);
                 }
-                DatabaseWorker.dataPresentInDBCallback.onDataInDBPresent();
+                Intent i = new Intent();
+                i.setAction("saveDataToDatabase");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+
+                //DatabaseWorker.dataPresentInDBCallback.onDataInDBPresent();
                 break;
             }
             case ("getDataFromDatabase"): {
@@ -43,7 +47,7 @@ public class AsyncIntent extends IntentService {
                 DatabaseWorker.dataToRetrieve = (ArrayList<RepositoryModel>) DatabaseWorker.db.getRepositoryDao().getAll();
                 //DatabaseWorker.dataRetrievedFromDBCallback.onDataFromDBRetrieved();
                 Intent i = new Intent();
-                i.setAction("IntentReceiver");
+                i.setAction("getDataFromDatabase");
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
                 break;
             }

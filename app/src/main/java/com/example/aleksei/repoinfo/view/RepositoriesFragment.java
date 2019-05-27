@@ -15,6 +15,7 @@ import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 import com.example.aleksei.repoinfo.view.ViewActivity;
 
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -27,6 +28,7 @@ public class RepositoriesFragment extends Fragment {
     static public RecyclerViewAdapter recyclerViewAdapter;
     private ArrayList placeHolderData;
     private Unbinder unbinder;
+    static int currentVisiblePosition = 0;
 
     @Nullable
     @Override
@@ -40,13 +42,28 @@ public class RepositoriesFragment extends Fragment {
         recyclerViewAdapter = new RecyclerViewAdapter();
         repoFragmentRecyclerView.setAdapter(recyclerViewAdapter);
 
+//LinearLayoutManager linearLayoutManager = (LinearLayoutManager) repoFragmentRecyclerView.getLayoutManager();
+//linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+
         return view;
     }
 
+
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        //ViewActivity.chiefPresenter.onUIReady(getActivity());
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        repoFragmentRecyclerView.scrollToPosition(currentVisiblePosition);
+        currentVisiblePosition = 0;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) repoFragmentRecyclerView.getLayoutManager();
+        currentVisiblePosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+
     }
 
     @Override

@@ -10,6 +10,16 @@ public class IntentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        DatabaseWorker.dataRetrievedFromDBCallback.onDataFromDBRetrieved();
+        switch (intent.getAction()) {
+            case ("saveDataToDatabase"): {
+                DatabaseWorker.dataPresentInDBCallback.onDataInDBPresent();
+                break;
+            }
+
+            case ("getDataFromDatabase"): {
+                DatabaseWorker.dataRetrievedFromDBCallback.onDataFromDBRetrieved();
+                break;
+            }
+        }
     }
 }

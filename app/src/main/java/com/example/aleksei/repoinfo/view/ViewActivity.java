@@ -1,20 +1,16 @@
 package com.example.aleksei.repoinfo.view;
 
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
 import com.example.aleksei.repoinfo.presenter.ChiefPresenter;
 import com.example.aleksei.repoinfo.R;
-import com.example.aleksei.repoinfo.presenter.IntentReceiver;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -35,10 +31,9 @@ import butterknife.ButterKnife;
 
 
 //добавить (при смене ориентации экрана)
-//сохранение позиции скролла списка
-//сохранение выбранноно эл-та списка
-//
-//
+//инфа в DetailedFragment
+//только одна версия БД Room
+//ошибка интернета
 //
 
 public class ViewActivity extends FragmentActivity {
@@ -48,7 +43,7 @@ public class ViewActivity extends FragmentActivity {
     @BindView(R.id.activity_view_ll)
     LinearLayout ll;
 
-    public static ChiefPresenter chiefPresenter;
+    public  ChiefPresenter chiefPresenter;
     public RepositoriesFragment repositoriesFragment;
     public DetailedInfoFragment detailedInfoFragment;
 
@@ -56,19 +51,30 @@ public class ViewActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+
+
         initializeUI();
+        showLoading();
 
-
+        if(savedInstanceState!=null){
+            detailedInfoFragment = (DetailedInfoFragment) getSupportFragmentManager().getFragment(savedInstanceState, "detailedInfoFragment" );
+        }else detailedInfoFragment = new DetailedInfoFragment();
+        repositoriesFragment = new RepositoriesFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
+        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_detailed, detailedInfoFragment);
+        fragmentTransaction.commit();
+        //setupFragments();
     }
 
     private void initializeUI() {
         ButterKnife.bind(this);
         //progressBar = findViewById(R.id.activity_repositories_pb);
         //ll = findViewById(R.id.activity_view_ll);
-        // showLoading();
+        //showLoading();
         chiefPresenter = new ChiefPresenter();
-
-        setupFragments();
+        //setupFragments();
     }
 
     private void setupFragments() {
@@ -98,26 +104,27 @@ public class ViewActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        ViewActivity.chiefPresenter.onUIReady(this);
-        chiefPresenter.setReceiver();
-        //ViewActivity.chiefPresenter.onUIReady(this);
-
-       /* ChiefPresenter.receiver = new IntentReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("IntentReceiver");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(receiver, intentFilter);*/
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        chiefPresenter.removeReceiver();
-        //unregisterReceiver(chiefPresenter.receiver);
+        //chiefPresenter.onUIReady(this);
+        chiefPresenter.setReceiver(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //ViewActivity.chiefPresenter.onUIReady(this);
+        chiefPresenter.onUIReady(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        chiefPresenter.removeReceiver(this);
+        //unregisterReceiver(chiefPresenter.receiver);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "detailedInfoFragment", detailedInfoFragment);
     }
 }

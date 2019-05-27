@@ -43,6 +43,7 @@ public class ViewActivity extends FragmentActivity {
     @BindView(R.id.activity_view_ll)
     LinearLayout ll;
 
+    
     public  ChiefPresenter chiefPresenter;
     public RepositoriesFragment repositoriesFragment;
     public DetailedInfoFragment detailedInfoFragment;

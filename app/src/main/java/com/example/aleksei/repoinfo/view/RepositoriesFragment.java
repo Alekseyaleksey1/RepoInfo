@@ -45,7 +45,7 @@ public class RepositoriesFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        ViewActivity.chiefPresenter.onUIReady(getActivity());
+        //ViewActivity.chiefPresenter.onUIReady(getActivity());
         super.onActivityCreated(savedInstanceState);
     }
 

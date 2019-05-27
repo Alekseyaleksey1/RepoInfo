@@ -32,7 +32,7 @@ public class ChiefModel {//todo delet dis
             @Override
             public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
                 arrayListShortResponce = response.body();
-                DatabaseWorker.getInstance(context).saveDataToDatabase(arrayListShortResponce);
+                DatabaseWorker.getInstance(context).saveDataToDatabase(context, (ArrayList<RepositoryModel>) arrayListShortResponce);
             }
 
             @Override

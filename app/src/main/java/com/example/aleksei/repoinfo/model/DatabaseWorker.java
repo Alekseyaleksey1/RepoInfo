@@ -1,8 +1,11 @@
 package com.example.aleksei.repoinfo.model;
 
+import android.app.IntentService;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 
@@ -15,13 +18,12 @@ import retrofit2.Response;
 
 public class DatabaseWorker {
     static private DatabaseWorker databaseWorker;
-    static private AppDatabase db;
-    public List<RepositoryModel> arrayListShortResponce;
-    static private DataPresentInDBCallback dataPresentInDBCallback;
-    static private DataRetrievedFromDBCallback dataRetrievedFromDBCallback;
+    public static AppDatabase db;
+    public ArrayList<RepositoryModel> arrayListShortResponce;
+    public static DataPresentInDBCallback dataPresentInDBCallback;
+    public static DataRetrievedFromDBCallback dataRetrievedFromDBCallback;
     static private DataLoadedFromInternetCallback dataLoadedFromInternetCallback;
     public static ArrayList<RepositoryModel> dataToRetrieve;
-
 
     private DatabaseWorker() {
     }
@@ -29,8 +31,9 @@ public class DatabaseWorker {
     public static DatabaseWorker getInstance(Context appContext) {
         if (databaseWorker == null) {
             databaseWorker = new DatabaseWorker();
+
         }
-        db = Room.databaseBuilder(appContext, AppDatabase.class, "db").allowMainThreadQueries().build();
+        db = Room.databaseBuilder(appContext, AppDatabase.class, "db").build();
         return databaseWorker;
     }
 
@@ -60,7 +63,7 @@ public class DatabaseWorker {
 
 
     public void getDataFromInternet() {
-
+        Log.i("DatabaseWorker", "getDataFromInternet");
         RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<RepositoryModel>>() {
             @Override
             public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
@@ -76,10 +79,16 @@ public class DatabaseWorker {
         });
     }
 
-    public void saveDataToDatabase(List<RepositoryModel> repositoriesList) {
+    public void saveDataToDatabase(Context appContext, ArrayList<RepositoryModel> repositoriesList) {
+        Log.i("DatabaseWorker", "saveDataToDatabase");
+        // db = Room.databaseBuilder(appContext, AppDatabase.class, "db").build();
+        Intent intent = new Intent(appContext, AsyncIntent.class);
+        intent.putParcelableArrayListExtra("repositoriesList", repositoriesList);
+        intent.setAction("saveDataToDatabase");
+        appContext.startService(intent);
+        /*AsyncSaver saver = new AsyncSaver();
+        saver.execute(repositoriesList);*/
 
-        AsyncSaver saver = new AsyncSaver();
-        saver.execute(repositoriesList);
         /*for (RepositoryModel repository : repositoriesList) {
             db.getRepositoryDao().insert(repository);
         }*/
@@ -105,9 +114,15 @@ public class DatabaseWorker {
         //dataPresentInDBCallback.onDataInDBPresent();
     }
 
-    public void getDataFromDatabase() {
-        AsyncGetter asyncGetter = new AsyncGetter();
-        asyncGetter.execute();
+    public void getDataFromDatabase(Context appContext) {
+        // db = Room.databaseBuilder(appContext, AppDatabase.class, "db").build();
+        Log.i("DatabaseWorker", "getDataFromDatabase");
+        // db = Room.databaseBuilder(appContext, AppDatabase.class, "db").build();
+        Intent intent = new Intent(appContext, AsyncIntent.class);
+        intent.setAction("getDataFromDatabase");
+        appContext.startService(intent);
+        /*AsyncGetter asyncGetter = new AsyncGetter();
+        asyncGetter.execute();*/
 
         //ArrayList<RepositoryModel> arrayList = (ArrayList<RepositoryModel>) db.getRepositoryDao().getAll();
 
@@ -143,7 +158,13 @@ public class DatabaseWorker {
         tuner.close();*/
     }
 
-    static class AsyncSaver extends AsyncTask<List<RepositoryModel>, Void, Void> {
+
+
+
+
+
+
+   /* static class AsyncSaver extends AsyncTask<List<RepositoryModel>, Void, Void> {
 
         @Override
         protected Void doInBackground(List<RepositoryModel>... lists) {
@@ -173,6 +194,8 @@ public class DatabaseWorker {
             dataToRetrieve = repositories;
             dataRetrievedFromDBCallback.onDataFromDBRetrieved();
         }
-    }
+    }*/
+
+
 }
 

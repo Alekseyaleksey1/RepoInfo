@@ -9,13 +9,19 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-public class RepositoryModel {
+public class RepositoryModel implements Parcelable {
+
+   // @NonNull
+   // @PrimaryKey
 
     @NonNull
-    @PrimaryKey
-    String name;
+    @PrimaryKey(autoGenerate = true)
 
+    int idT;
+
+    String name;
     int id;
+
     int forks;
     String description;
     String url;
@@ -25,6 +31,30 @@ public class RepositoryModel {
     int stargazersCount;
     @SerializedName("watchers_count")
     int watchersCount;
+
+    public RepositoryModel(){}
+    protected RepositoryModel(Parcel in) {
+        name = in.readString();
+        id = in.readInt();
+        forks = in.readInt();
+        description = in.readString();
+        url = in.readString();
+        fullName = in.readString();
+        stargazersCount = in.readInt();
+        watchersCount = in.readInt();
+    }
+
+    public static final Creator<RepositoryModel> CREATOR = new Creator<RepositoryModel>() {
+        @Override
+        public RepositoryModel createFromParcel(Parcel in) {
+            return new RepositoryModel(in);
+        }
+
+        @Override
+        public RepositoryModel[] newArray(int size) {
+            return new RepositoryModel[size];
+        }
+    };
 
     public int getStargazersCount() {
         return stargazersCount;
@@ -88,5 +118,30 @@ public class RepositoryModel {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getIdT() {
+        return idT;
+    }
+
+    public void setIdT(int idT) {
+        this.idT = idT;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(id);
+        dest.writeInt(forks);
+        dest.writeString(description);
+        dest.writeString(url);
+        dest.writeString(fullName);
+        dest.writeInt(stargazersCount);
+        dest.writeInt(watchersCount);
     }
 }

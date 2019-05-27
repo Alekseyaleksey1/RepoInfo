@@ -1,10 +1,15 @@
 package com.example.aleksei.repoinfo.presenter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -19,9 +24,10 @@ import com.example.aleksei.repoinfo.view.ViewActivity;
 import java.io.File;
 
 
-public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, DatabaseWorker.DataRetrievedFromDBCallback, DatabaseWorker.DataLoadedFromInternetCallback ,RecyclerViewAdapter.ItemClickedInAdapterCallback {
+public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, DatabaseWorker.DataRetrievedFromDBCallback, DatabaseWorker.DataLoadedFromInternetCallback, RecyclerViewAdapter.ItemClickedInAdapterCallback {
 
     ViewActivity activityInstance;
+    public IntentReceiver receiver;
 
     public boolean checkDBExists(Context appContext) {
 
@@ -46,7 +52,7 @@ public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, D
         DatabaseWorker.getInstance(appContext).registerForDataRetrievedCallback(this);
         DatabaseWorker.getInstance(appContext).registerForDataLoadedCallback(this);
         RepositoriesFragment.recyclerViewAdapter.registerForCallback(this);
-
+//        lockScreenOrientation();
         if (checkDBExists(appContext)) {
             onDataInDBPresent();
         } else {
@@ -60,25 +66,27 @@ public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, D
 
     @Override
     public void onDataInDBPresent() {
-        activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase();
-       /* RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();
-        activityInstance.hideLoading();*/
+        //activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        //lockScreenOrientation();
+        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase(activityInstance.getApplicationContext());
+        /* RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();*/
+        //activityInstance.hideLoading();
     }
 
     @Override
     public void onDataFromInternetLoaded() {
-        activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).saveDataToDatabase(DatabaseWorker.getInstance(activityInstance.getApplicationContext()).arrayListShortResponce);
+        //activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
+        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).saveDataToDatabase(activityInstance.getApplicationContext(), DatabaseWorker.getInstance(activityInstance.getApplicationContext()).arrayListShortResponce);
     }
 
     @Override
     public void onDataFromDBRetrieved() {
-
         RecyclerViewAdapter.setDataToAdapter(DatabaseWorker.dataToRetrieve);
         RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();
         activityInstance.hideLoading();
-        activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        //activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        //      unlockScreenOrientation();
     }
 
     @Override
@@ -87,4 +95,31 @@ public class ChiefPresenter implements DatabaseWorker.DataPresentInDBCallback, D
         int itemPosition = recyclerView.getChildAdapterPosition(v);
         activityInstance.detailedInfoFragment.setFullName(RecyclerViewAdapter.arrayList.get(itemPosition).getFullName());
     }
+
+    /*private void lockScreenOrientation() {
+        int currentOrientation = activityInstance.getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+    private void unlockScreenOrientation() {
+        activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }*/
+
+
+
+    public void setReceiver() {
+        receiver = new IntentReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("IntentReceiver");
+        LocalBroadcastManager.getInstance(activityInstance.getApplicationContext()).registerReceiver(receiver, intentFilter);
+    }
+
+    public void removeReceiver(){
+        LocalBroadcastManager.getInstance(activityInstance.getApplicationContext()).unregisterReceiver(receiver);
+    }
 }
+

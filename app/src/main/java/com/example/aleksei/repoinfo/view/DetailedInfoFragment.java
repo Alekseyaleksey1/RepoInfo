@@ -10,30 +10,51 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aleksei.repoinfo.R;
+import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class DetailedInfoFragment extends Fragment {
 
+    @BindView(R.id.fragment_detailed_tv_fullname_text)
     TextView tvFullName;
+    @BindView(R.id.fragment_detailed_tv_description_text)
+    TextView tvDescription;
+    @BindView(R.id.fragment_detailed_tv_url_text)
+    TextView tvUrl;
+    @BindView(R.id.fragment_detailed_tv_openissues_text)
+    TextView tvOpenIssues;
+
+    RepositoryModel repository;
+    Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_detailed, null);
-        tvFullName = view.findViewById(R.id.fragment_detailed_tv_fullname);
+
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }
 
-    public void setFullName(String fullName) {
-        tvFullName.setText(fullName);
+    public void setDetailedData(RepositoryModel repository) {
+        this.repository = repository;
+        tvFullName.setText(repository.getFullName());
+        tvDescription.setText(repository.getDescription());
+        tvUrl.setText(repository.getUrl());
+        tvOpenIssues.setText(String.valueOf(repository.getOpenIssues()));
     }
 
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("fullName", tvFullName.getText().toString());
+        //outState.putString("fullName", tvFullName.getText().toString());
+        outState.putParcelable("repository", repository);
 
     }
 
@@ -50,7 +71,16 @@ public class DetailedInfoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            tvFullName.setText(savedInstanceState.getString("fullName"));
+            this.repository = savedInstanceState.getParcelable("repository");
+            setDetailedData(repository);
+            //tvFullName.setText(savedInstanceState.getString("fullName"));
         }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

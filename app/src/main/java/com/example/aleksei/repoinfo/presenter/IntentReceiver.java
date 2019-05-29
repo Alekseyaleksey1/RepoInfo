@@ -12,12 +12,12 @@ public class IntentReceiver extends BroadcastReceiver {
 
         switch (intent.getAction()) {
             case ("saveDataToDatabase"): {
-                DatabaseWorker.dataPresentInDBCallback.onDataInDBPresent();
+                DatabaseWorker.dataCallback.onDataInDBPresent();
                 break;
             }
 
             case ("getDataFromDatabase"): {
-                DatabaseWorker.dataRetrievedFromDBCallback.onDataFromDBRetrieved();
+                DatabaseWorker.dataCallback.onDataFromDBRetrieved();
                 break;
             }
         }

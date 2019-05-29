@@ -17,13 +17,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public static ArrayList<RepositoryModel> arrayList = new ArrayList<>();
-    ItemClickedInAdapterCallback callback;
+    ItemClickedCallback callback;
 
-    public void registerForCallback(ItemClickedInAdapterCallback callback) {
+    public void registerForCallback(ItemClickedCallback callback) {
         this.callback = callback;
     }
 
-    public interface ItemClickedInAdapterCallback {
+    public interface ItemClickedCallback {
         void onItemClicked(View v);
     }
 

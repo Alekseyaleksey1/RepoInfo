@@ -4,14 +4,10 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
-import com.example.aleksei.repoinfo.presenter.ChiefPresenter;
-
 import java.util.ArrayList;
 
 public class AsyncIntent extends IntentService {
-
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -38,8 +34,7 @@ public class AsyncIntent extends IntentService {
                 Intent i = new Intent();
                 i.setAction("saveDataToDatabase");
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
-
-                //DatabaseWorker.dataPresentInDBCallback.onDataInDBPresent();
+                //DatabaseWorker.dataCallback.onDataInDBPresent();
                 break;
             }
             case ("getDataFromDatabase"): {

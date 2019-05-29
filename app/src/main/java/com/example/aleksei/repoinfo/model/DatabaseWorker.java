@@ -1,16 +1,13 @@
 package com.example.aleksei.repoinfo.model;
 
-import android.app.IntentService;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,9 +17,9 @@ public class DatabaseWorker {
     static private DatabaseWorker databaseWorker;
     public static AppDatabase db;
     public ArrayList<RepositoryModel> arrayListShortResponce;
-    public static DataPresentInDBCallback dataPresentInDBCallback;
-    public static DataRetrievedFromDBCallback dataRetrievedFromDBCallback;
-    static private DataLoadedFromInternetCallback dataLoadedFromInternetCallback;
+    public static DataCallback dataCallback;
+    //public static DataRetrievedFromDBCallback dataRetrievedFromDBCallback;
+    //static private DataLoadedFromInternetCallback dataLoadedFromInternetCallback;
     public static ArrayList<RepositoryModel> dataToRetrieve;
 
     private DatabaseWorker() {
@@ -37,29 +34,31 @@ public class DatabaseWorker {
         return databaseWorker;
     }
 
-    public void registerForDataPresentCallback(DataPresentInDBCallback callback) {
-        dataPresentInDBCallback = callback;
+    public void registerForDataCallback(DataCallback callback) {
+        dataCallback = callback;
     }
 
-    public void registerForDataRetrievedCallback(DataRetrievedFromDBCallback callback) {
+    /*public void registerForDataRetrievedCallback(DataRetrievedFromDBCallback callback) {
         dataRetrievedFromDBCallback = callback;
     }
 
     public void registerForDataLoadedCallback(DataLoadedFromInternetCallback callback) {
         dataLoadedFromInternetCallback = callback;
-    }
+    }*/
 
-    public interface DataPresentInDBCallback {
+    public interface DataCallback {
         void onDataInDBPresent();
+        void onDataFromDBRetrieved();
+        void onDataFromInternetLoaded();
     }
 
-    public interface DataRetrievedFromDBCallback {
+   /* public interface DataRetrievedFromDBCallback {
         void onDataFromDBRetrieved();
     }
 
     public interface DataLoadedFromInternetCallback {
         void onDataFromInternetLoaded();
-    }
+    }*/
 
 
     public void getDataFromInternet() {
@@ -68,7 +67,7 @@ public class DatabaseWorker {
             @Override
             public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
                 arrayListShortResponce = response.body();
-                dataLoadedFromInternetCallback.onDataFromInternetLoaded();
+                dataCallback.onDataFromInternetLoaded();
                 //saveDataToDatabase(arrayListShortResponce);//todo callback
             }
 
@@ -111,7 +110,7 @@ public class DatabaseWorker {
             db.insert("dbTable", null, contentValues);
         }
         tuner.close();*/
-        //dataPresentInDBCallback.onDataInDBPresent();
+        //dataCallback.onDataInDBPresent();
     }
 
     public void getDataFromDatabase(Context appContext) {
@@ -144,7 +143,7 @@ public class DatabaseWorker {
                 RepositoryModel pojoShort = new RepositoryModel();
                 pojoShort.setId(cursor.getInt(idIndex));
                 pojoShort.setName(cursor.getString(nameIndex));
-                pojoShort.setFullName(cursor.getString(fullNameIndex));
+                pojoShort.setDetailedData(cursor.getString(fullNameIndex));
                 pojoShort.setDescription(cursor.getString(descriptionIndex));
                 pojoShort.setUrl(cursor.getString(urlIndex));
                 pojoShort.setWatchersCount(cursor.getInt(watcherscountIndex));
@@ -177,7 +176,7 @@ public class DatabaseWorker {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dataPresentInDBCallback.onDataInDBPresent();
+            dataCallback.onDataInDBPresent();
         }
     }
 

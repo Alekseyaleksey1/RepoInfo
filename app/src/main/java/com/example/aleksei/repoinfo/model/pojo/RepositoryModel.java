@@ -11,17 +11,11 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 public class RepositoryModel implements Parcelable {
 
-   // @NonNull
-   // @PrimaryKey
-
     @NonNull
     @PrimaryKey(autoGenerate = true)
-
     int idT;
-
     String name;
     int id;
-
     int forks;
     String description;
     String url;
@@ -31,8 +25,12 @@ public class RepositoryModel implements Parcelable {
     int stargazersCount;
     @SerializedName("watchers_count")
     int watchersCount;
+    @SerializedName("open_issues")
+    int openIssues;
 
-    public RepositoryModel(){}
+    public RepositoryModel() {
+    }
+
     protected RepositoryModel(Parcel in) {
         name = in.readString();
         id = in.readInt();
@@ -42,6 +40,7 @@ public class RepositoryModel implements Parcelable {
         fullName = in.readString();
         stargazersCount = in.readInt();
         watchersCount = in.readInt();
+        openIssues = in.readInt();
     }
 
     public static final Creator<RepositoryModel> CREATOR = new Creator<RepositoryModel>() {
@@ -128,6 +127,14 @@ public class RepositoryModel implements Parcelable {
         this.idT = idT;
     }
 
+    public int getOpenIssues() {
+        return openIssues;
+    }
+
+    public void setOpenIssues(int openIssues) {
+        this.openIssues = openIssues;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -143,5 +150,6 @@ public class RepositoryModel implements Parcelable {
         dest.writeString(fullName);
         dest.writeInt(stargazersCount);
         dest.writeInt(watchersCount);
+        dest.writeInt(openIssues);
     }
 }

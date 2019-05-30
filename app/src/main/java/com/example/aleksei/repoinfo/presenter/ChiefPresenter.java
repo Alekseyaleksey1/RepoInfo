@@ -1,28 +1,25 @@
 package com.example.aleksei.repoinfo.presenter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-
-import com.example.aleksei.repoinfo.R;
-import com.example.aleksei.repoinfo.model.DatabaseWorker;
+import com.example.aleksei.repoinfo.model.DataWorker;
+import com.example.aleksei.repoinfo.model.database.DataIntentService;
 import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 import com.example.aleksei.repoinfo.view.RepositoriesFragment;
 import com.example.aleksei.repoinfo.view.ViewActivity;
+import com.example.aleksei.repoinfo.view.ViewInterface;
 
 import java.io.File;
 
+public class ChiefPresenter implements DataWorker.DataCallback {
 
-public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerViewAdapter.ItemClickedCallback {
-
-    private ViewActivity activityInstance;
-    private IntentReceiver receiver;
+    private ViewInterface viewInterface;
+    private Context appContext;
+    private DataActionReceiver receiver;
 
     private boolean checkDBExists(Context appContext) {
         File dbFile = appContext.getDatabasePath("db");
@@ -37,51 +34,43 @@ public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerView
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    public void onUIReady(Activity activity) {
-        activityInstance = (ViewActivity) activity;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
-        Context appContext = this.activityInstance.getApplicationContext();
-        DatabaseWorker.getInstance(appContext).registerForDataCallback(this);
-        RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
+    public void onUIReady(ViewInterface viewInterface, Context appContext) {
+        this.viewInterface =  viewInterface;
+        this.appContext = appContext;
+        DataWorker.getInstance(appContext).registerForDataCallback(this);
         if (checkDBExists(appContext)) {
             onDataInDBPresent();
         } else {
             if (checkInternetAvailability(appContext)) {
-                DatabaseWorker.getInstance(appContext).getDataFromInternet();
+                DataWorker.getInstance(appContext).getDataFromInternet();
             } else {
-                activityInstance.showInternetError(activityInstance);
+                viewInterface.showInternetError(viewInterface);
             }
         }
     }
 
     @Override
     public void onDataInDBPresent() {
-        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase(activityInstance.getApplicationContext());
+        DataWorker.getInstance(appContext).getDataFromDatabase(appContext);
     }
 
     @Override
     public void onDataFromInternetLoaded() {
-        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).saveDataToDatabase(activityInstance.getApplicationContext(), DatabaseWorker.getInstance(activityInstance.getApplicationContext()).arrayListResponce);
+        DataWorker.getInstance(appContext).saveDataToDatabase(appContext, DataWorker.getInstance(appContext).getListOfRepositoriesResponse());
     }
 
     @Override
     public void onDataFromDBRetrieved() {
-        RecyclerViewAdapter.setDataToAdapter(DatabaseWorker.dataToRetrieve);
+        RecyclerViewAdapter.setDataToAdapter(DataWorker.getInstance(appContext).getDataToRetrieve());
         RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();
-        activityInstance.hideLoading();
-    }
-
-    @Override
-    public void onItemClicked(View v) {
-        RecyclerView recyclerView = activityInstance.findViewById(R.id.fragment_repositories_rv);
-        int itemPosition = recyclerView.getChildAdapterPosition(v);
-        activityInstance.detailedInfoFragment.setDetailedData(RecyclerViewAdapter.arrayList.get(itemPosition));
+        viewInterface.hideLoading();
     }
 
     public void setReceiver(ViewActivity viewActivity) {
-        receiver = new IntentReceiver();
+        receiver = new DataActionReceiver(DataWorker.getInstance(viewActivity.getApplicationContext()));
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("saveDataToDatabase");
-        intentFilter.addAction("getDataFromDatabase");
+        intentFilter.addAction(DataIntentService.ACTION_SAVE_DB);
+        intentFilter.addAction(DataIntentService.ACTION_GET_DB);
         LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).registerReceiver(receiver, intentFilter);
     }
 

@@ -14,10 +14,10 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
 
 
-    public static ArrayList<RepositoryModel> arrayList = new ArrayList<>();
+    static ArrayList<RepositoryModel> arrayList = new ArrayList<>();
     private ItemClickedCallback callback;
 
-    public void registerForListCallback(ItemClickedCallback callback) {
+    void registerForListCallback(ItemClickedCallback callback) {
         this.callback = callback;
     }
 

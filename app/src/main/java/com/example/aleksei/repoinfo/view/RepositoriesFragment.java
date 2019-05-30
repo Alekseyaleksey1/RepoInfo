@@ -20,7 +20,6 @@ public class RepositoriesFragment extends Fragment {
     @BindView(R.id.fragment_repositories_rv)
     public RecyclerView repoFragmentRecyclerView;
     static public RecyclerViewAdapter recyclerViewAdapter;
-    private ArrayList placeHolderData;
     private Unbinder unbinder;
     static int currentVisiblePosition = 0;
 
@@ -31,7 +30,6 @@ public class RepositoriesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_repositories, null);
         unbinder = ButterKnife.bind(this, view);
         repoFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        placeHolderData = new ArrayList();
         recyclerViewAdapter = new RecyclerViewAdapter();
         repoFragmentRecyclerView.setAdapter(recyclerViewAdapter);
         return view;
@@ -48,7 +46,9 @@ public class RepositoriesFragment extends Fragment {
     public void onPause() {
         super.onPause();
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) repoFragmentRecyclerView.getLayoutManager();
-        currentVisiblePosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+        if (linearLayoutManager != null) {
+            currentVisiblePosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+        }
     }
 
     @Override

@@ -27,6 +27,7 @@ public class DetailedInfoFragment extends Fragment {
     @BindView(R.id.fragment_detailed_tv_openissues_text)
     TextView tvOpenIssues;
     RepositoryModel repository;
+    public static final String REPOSITORY_KEY = "repository";
     Unbinder unbinder;
 
     @Nullable
@@ -50,14 +51,14 @@ public class DetailedInfoFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("repository", repository);
+        outState.putParcelable(REPOSITORY_KEY, repository);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            this.repository = savedInstanceState.getParcelable("repository");
+            this.repository = savedInstanceState.getParcelable(REPOSITORY_KEY);
             if (repository != null)
                 setDetailedData(repository);
         }

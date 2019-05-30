@@ -5,27 +5,27 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class RepositoryModel implements Parcelable {
 
-    @NonNull
     @PrimaryKey(autoGenerate = true)
-    int idT;
-    String name;
-    int id;
-    int forks;
-    String description;
-    String url;
+    private int idT;
+    private String name;
+    private int id;
+    private int forks;
+    private String description;
+    private String url;
     @SerializedName("full_name")
-    String fullName;
+    private String fullName;
     @SerializedName("stargazers_count")
-    int stargazersCount;
+    private int stargazersCount;
     @SerializedName("watchers_count")
-    int watchersCount;
+    private int watchersCount;
     @SerializedName("open_issues")
-    int openIssues;
+    private int openIssues;
 
     public RepositoryModel() {
     }

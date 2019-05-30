@@ -1,4 +1,4 @@
-package com.example.aleksei.repoinfo.model;
+package com.example.aleksei.repoinfo.model.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;

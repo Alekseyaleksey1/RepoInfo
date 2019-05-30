@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".model.AsyncIntent">
+        <service android:name=".model.database.DataIntentService">
 
         </service>
 

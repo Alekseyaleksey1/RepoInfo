@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.aleksei.repoinfo.R;
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,7 +24,6 @@ public class DetailedInfoFragment extends Fragment {
     TextView tvUrl;
     @BindView(R.id.fragment_detailed_tv_openissues_text)
     TextView tvOpenIssues;
-
     RepositoryModel repository;
     Unbinder unbinder;
 
@@ -35,9 +32,7 @@ public class DetailedInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_detailed, null);
-
         unbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 
@@ -53,19 +48,8 @@ public class DetailedInfoFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putString("fullName", tvFullName.getText().toString());
         outState.putParcelable("repository", repository);
-
     }
-
-   /* @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            tvFullName.setText(savedInstanceState.getString("fullName"));
-        }
-    }*/
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -73,10 +57,8 @@ public class DetailedInfoFragment extends Fragment {
         if (savedInstanceState != null) {
             this.repository = savedInstanceState.getParcelable("repository");
             setDetailedData(repository);
-            //tvFullName.setText(savedInstanceState.getString("fullName"));
         }
     }
-
 
     @Override
     public void onDestroyView() {

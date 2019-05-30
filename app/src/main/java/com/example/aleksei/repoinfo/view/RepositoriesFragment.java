@@ -9,13 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.aleksei.repoinfo.R;
-import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
-import com.example.aleksei.repoinfo.view.ViewActivity;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,7 +19,6 @@ public class RepositoriesFragment extends Fragment {
 
     @BindView(R.id.fragment_repositories_rv)
     public RecyclerView repoFragmentRecyclerView;
-
     static public RecyclerViewAdapter recyclerViewAdapter;
     private ArrayList placeHolderData;
     private Unbinder unbinder;
@@ -36,19 +30,12 @@ public class RepositoriesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_repositories, null);
         unbinder = ButterKnife.bind(this, view);
-        //repoFragmentRecyclerView = view.findViewById(R.id.fragment_repositories_rv);
         repoFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         placeHolderData = new ArrayList();
         recyclerViewAdapter = new RecyclerViewAdapter();
         repoFragmentRecyclerView.setAdapter(recyclerViewAdapter);
-
-//LinearLayoutManager linearLayoutManager = (LinearLayoutManager) repoFragmentRecyclerView.getLayoutManager();
-//linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-
         return view;
     }
-
-
 
     @Override
     public void onResume() {
@@ -60,10 +47,8 @@ public class RepositoriesFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) repoFragmentRecyclerView.getLayoutManager();
         currentVisiblePosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-
     }
 
     @Override

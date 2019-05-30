@@ -44,10 +44,7 @@ public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerView
         activityInstance = (ViewActivity) activity;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
         Context appContext = this.activityInstance.getApplicationContext();
         DatabaseWorker.getInstance(appContext).registerForDataCallback(this);
-       // DatabaseWorker.getInstance(appContext).registerForDataRetrievedCallback(this);
-       // DatabaseWorker.getInstance(appContext).registerForDataLoadedCallback(this);
         RepositoriesFragment.recyclerViewAdapter.registerForCallback(this);
-//        lockScreenOrientation();
         if (checkDBExists(appContext)) {
             onDataInDBPresent();
         } else {
@@ -55,18 +52,13 @@ public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerView
                 DatabaseWorker.getInstance(appContext).getDataFromInternet();
             } else {
                 activityInstance.showInternetError(activityInstance);
-                //Toast.makeText(appContext, "DB is non existing and Internet is not avaliable", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     @Override
     public void onDataInDBPresent() {
-        //activityInstance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        //lockScreenOrientation();
         DatabaseWorker.getInstance(activityInstance.getApplicationContext()).getDataFromDatabase(activityInstance.getApplicationContext());
-        /* RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();*/
-        //activityInstance.hideLoading();
     }
 
     @Override

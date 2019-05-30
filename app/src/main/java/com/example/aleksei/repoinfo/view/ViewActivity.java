@@ -6,38 +6,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
 import com.example.aleksei.repoinfo.presenter.ChiefPresenter;
 import com.example.aleksei.repoinfo.R;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/*Условия:  minApi 15
-        	произвольный дизайн
-        	использование фрагментов
-        	все ориентации экрана
-        	любая база данных или обертка для базы данных
-        	без доступа к интернет соединению, показывать только данные из базы
-        	поддержка всех плотностей экрана
-        Цель:
-        Создать приложение, которое делает http запросы на официальный GitHub API, сохраняет данные в базу данных, и показывает в интерфейсе.
-        Документация - https://developer.github.com/v3/repos/
-        Что загружать - список репозиториев https://github.com/square
-        Как показывать:
-        Первый экран - список репозиториев. В каждой ячейке списка - название репозитория, количество звезд, форков и watch-ей.
-        По клику на репозиторий переход на второй экран - детали репозитория. Полное название, описание, url, количественные показатели, количество коммитов + (еще что нибудь по желанию).*/
-
-
-//добавить (при смене ориентации экрана)
-//только одна версия БД Room
-//
-//
 
 public class ViewActivity extends FragmentActivity {
 
@@ -45,9 +20,6 @@ public class ViewActivity extends FragmentActivity {
     ProgressBar progressBar;
     @BindView(R.id.activity_view_ll)
     LinearLayout ll;
-
-
-
     public ChiefPresenter chiefPresenter;
     public RepositoriesFragment repositoriesFragment;
     public DetailedInfoFragment detailedInfoFragment;
@@ -69,27 +41,12 @@ public class ViewActivity extends FragmentActivity {
         fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
         fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_detailed, detailedInfoFragment);
         fragmentTransaction.commit();
-        //setupFragments();
     }
 
     private void initializeUI() {
         ButterKnife.bind(this);
-        //progressBar = findViewById(R.id.activity_repositories_pb);
-        //ll = findViewById(R.id.activity_view_ll);
-        //showLoading();
         chiefPresenter = new ChiefPresenter();
-        //setupFragments();
     }
-
-    /*private void setupFragments() {
-        repositoriesFragment = new RepositoriesFragment();
-        detailedInfoFragment = new DetailedInfoFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
-        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_detailed, detailedInfoFragment);
-        fragmentTransaction.commit();
-    }*/
 
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
@@ -111,21 +68,14 @@ public class ViewActivity extends FragmentActivity {
                         chiefPresenter.onUIReady(activityInstance);
                         break;
                     }
-                    /*case (DialogInterface.BUTTON_NEGATIVE): {
-                        dialog.cancel();
-                        break;
-                    }*/
                 }
             }
         };
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Internet is not available")
                 .setCancelable(false)
                 .setPositiveButton("Retry", listener)
                 .show();
-
-
     }
 
     @Override
@@ -140,7 +90,6 @@ public class ViewActivity extends FragmentActivity {
     protected void onStop() {
         super.onStop();
         chiefPresenter.removeReceiver(this);
-        //unregisterReceiver(chiefPresenter.receiver);
     }
 
     @Override

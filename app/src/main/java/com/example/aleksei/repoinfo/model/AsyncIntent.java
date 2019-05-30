@@ -3,7 +3,6 @@ package com.example.aleksei.repoinfo.model;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import java.util.ArrayList;
 
@@ -23,7 +22,6 @@ public class AsyncIntent extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i("AsyncIntent", "onHandleIntent");
         switch (intent.getAction()) {
             case ("saveDataToDatabase"): {
                 ArrayList<RepositoryModel> repositoriesList = intent.getParcelableArrayListExtra("repositoriesList");
@@ -34,13 +32,10 @@ public class AsyncIntent extends IntentService {
                 Intent i = new Intent();
                 i.setAction("saveDataToDatabase");
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
-                //DatabaseWorker.dataCallback.onDataInDBPresent();
                 break;
             }
             case ("getDataFromDatabase"): {
-
                 DatabaseWorker.dataToRetrieve = (ArrayList<RepositoryModel>) DatabaseWorker.db.getRepositoryDao().getAll();
-                //DatabaseWorker.dataRetrievedFromDBCallback.onDataFromDBRetrieved();
                 Intent i = new Intent();
                 i.setAction("getDataFromDatabase");
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);

@@ -9,7 +9,7 @@ import com.example.aleksei.repoinfo.model.database.DataIntentService;
 
 public class DataActionReceiver extends BroadcastReceiver {
 
-    DataWorker dataWorker;
+    private DataWorker dataWorker;
 
     DataActionReceiver(DataWorker dataWorker) {
         this.dataWorker = dataWorker;

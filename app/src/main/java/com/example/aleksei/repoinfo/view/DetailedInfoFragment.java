@@ -18,6 +18,7 @@ import butterknife.Unbinder;
 
 public class DetailedInfoFragment extends Fragment {
 
+    public static final String REPOSITORY_KEY = "repository";
     @BindView(R.id.fragment_detailed_tv_fullname_text)
     TextView tvFullName;
     @BindView(R.id.fragment_detailed_tv_description_text)
@@ -27,13 +28,11 @@ public class DetailedInfoFragment extends Fragment {
     @BindView(R.id.fragment_detailed_tv_openissues_text)
     TextView tvOpenIssues;
     RepositoryModel repository;
-    public static final String REPOSITORY_KEY = "repository";
     Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_detailed, null);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -46,7 +45,6 @@ public class DetailedInfoFragment extends Fragment {
         tvUrl.setText(repository.getUrl());
         tvOpenIssues.setText(String.valueOf(repository.getOpenIssues()));
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

@@ -10,35 +10,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
 import com.example.aleksei.repoinfo.presenter.ChiefPresenter;
 import com.example.aleksei.repoinfo.R;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ViewActivity extends FragmentActivity implements ViewInterface,  RecyclerViewAdapter.ItemClickedCallback {
+public class ViewActivity extends FragmentActivity implements ViewInterface, RecyclerViewAdapter.ItemClickedCallback {
 
+    private static final String DETAILED_FRAGMENT_KEY = "detailedInfoFragment";
+    private DetailedInfoFragment detailedInfoFragment;
     @BindView(R.id.activity_repositories_pb)
     ProgressBar progressBar;
     @BindView(R.id.activity_view_ll)
-    LinearLayout ll;
-
-    public ChiefPresenter chiefPresenter;
-    public RepositoriesFragment repositoriesFragment;
-    public DetailedInfoFragment detailedInfoFragment;
-    public static final String DETAILED_FRAGMENT_KEY = "detailedInfoFragment";
+    LinearLayout fragmentsHolder;
+    private ChiefPresenter chiefPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
         initializeUI();
-        showLoading();
 
         if (savedInstanceState != null) {
             detailedInfoFragment = (DetailedInfoFragment) getSupportFragmentManager().getFragment(savedInstanceState, DETAILED_FRAGMENT_KEY);
         } else
             detailedInfoFragment = new DetailedInfoFragment();
-        repositoriesFragment = new RepositoriesFragment();
+        RepositoriesFragment repositoriesFragment = new RepositoriesFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
@@ -55,13 +54,13 @@ public class ViewActivity extends FragmentActivity implements ViewInterface,  Re
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
-        ll.setVisibility(View.INVISIBLE);
+        fragmentsHolder.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.INVISIBLE);
-        ll.setVisibility(View.VISIBLE);
+        fragmentsHolder.setVisibility(View.VISIBLE);
     }
 
     @Override

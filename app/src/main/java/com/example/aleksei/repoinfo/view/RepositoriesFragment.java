@@ -17,11 +17,11 @@ import butterknife.Unbinder;
 
 public class RepositoriesFragment extends Fragment {
 
+    public static RecyclerViewAdapter recyclerViewAdapter;
+    static int currentVisiblePosition = 0;
     @BindView(R.id.fragment_repositories_rv)
     public RecyclerView repoFragmentRecyclerView;
-    static public RecyclerViewAdapter recyclerViewAdapter;
     private Unbinder unbinder;
-    static int currentVisiblePosition = 0;
 
     @Nullable
     @Override

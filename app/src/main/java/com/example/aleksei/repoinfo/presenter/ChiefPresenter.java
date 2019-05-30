@@ -35,6 +35,7 @@ public class ChiefPresenter implements DataWorker.DataCallback {
     }
 
     public void onUIReady(ViewInterface viewInterface, Context appContext) {
+        viewInterface.showLoading();
         this.viewInterface =  viewInterface;
         this.appContext = appContext;
         DataWorker.getInstance(appContext).registerForDataCallback(this);

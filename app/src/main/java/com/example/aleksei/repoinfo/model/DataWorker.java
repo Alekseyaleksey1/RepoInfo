@@ -16,10 +16,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DataWorker {
-    static private DataWorker dataWorker;
+
     public static final String REPOSITORIES_LIST_KEY = "repositoriesList";
-    private ArrayList<RepositoryModel> listOfRepositoriesResponse;
+    private static DataWorker dataWorker;
     public DataCallback dataCallback;
+    private ArrayList<RepositoryModel> listOfRepositoriesResponse;
     private ArrayList<RepositoryModel> dataToRetrieve;
     private ApplicationDatabase db;
 

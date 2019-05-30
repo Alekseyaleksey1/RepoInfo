@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">RepoInfo</string>
+    <string name="pick_repository_from_list">Pick repository from list</string>
+    <string name="full_name">Full name:</string>
+    <string name="description">Description:</string>
+    <string name="url">URL:</string>
+    <string name="number_of_issues">Number of issues:</string>
+    <string name="repository_name">Repository name:</string>
+    <string name="number_of_stars">Number of stars:</string>
+    <string name="number_of_forks">Number of forks:</string>
+    <string name="number_of_watches">Number of watches:</string>
 </resources>

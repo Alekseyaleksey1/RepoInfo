@@ -21,18 +21,16 @@ import java.io.File;
 
 public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerViewAdapter.ItemClickedCallback {
 
-    ViewActivity activityInstance;
-    public IntentReceiver receiver;
+    private ViewActivity activityInstance;
+    private IntentReceiver receiver;
 
-    public boolean checkDBExists(Context appContext) {
-
+    private boolean checkDBExists(Context appContext) {
         File dbFile = appContext.getDatabasePath("db");
         Log.i("checkDBExists", String.valueOf(dbFile.exists()));
         return dbFile.exists();
     }
 
-    public boolean checkInternetAvailability(Context appContext) {
-
+    private boolean checkInternetAvailability(Context appContext) {
         ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         Log.i("checkInternet", String.valueOf(networkInfo != null && networkInfo.isConnected()));
@@ -40,11 +38,10 @@ public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerView
     }
 
     public void onUIReady(Activity activity) {
-
         activityInstance = (ViewActivity) activity;//todo methods to attachActivityInstance/detachActivityInstance in Activity's onCreate/onDestroy
         Context appContext = this.activityInstance.getApplicationContext();
         DatabaseWorker.getInstance(appContext).registerForDataCallback(this);
-        RepositoriesFragment.recyclerViewAdapter.registerForCallback(this);
+        RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
         if (checkDBExists(appContext)) {
             onDataInDBPresent();
         } else {
@@ -63,7 +60,7 @@ public class ChiefPresenter implements DatabaseWorker.DataCallback, RecyclerView
 
     @Override
     public void onDataFromInternetLoaded() {
-        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).saveDataToDatabase(activityInstance.getApplicationContext(), DatabaseWorker.getInstance(activityInstance.getApplicationContext()).arrayListShortResponce);
+        DatabaseWorker.getInstance(activityInstance.getApplicationContext()).saveDataToDatabase(activityInstance.getApplicationContext(), DatabaseWorker.getInstance(activityInstance.getApplicationContext()).arrayListResponce);
     }
 
     @Override

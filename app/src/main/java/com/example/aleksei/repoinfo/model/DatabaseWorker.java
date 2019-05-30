@@ -3,7 +3,7 @@ package com.example.aleksei.repoinfo.model;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import java.util.ArrayList;
 import retrofit2.Call;
@@ -13,7 +13,7 @@ import retrofit2.Response;
 public class DatabaseWorker {
     static private DatabaseWorker databaseWorker;
     static AppDatabase db;
-    public ArrayList<RepositoryModel> arrayListShortResponce;
+    public ArrayList<RepositoryModel> arrayListResponce;
     public static DataCallback dataCallback;
     public static ArrayList<RepositoryModel> dataToRetrieve;
 
@@ -43,7 +43,7 @@ public class DatabaseWorker {
         RetrofitTuner.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<RepositoryModel>>() {
             @Override
             public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
-                arrayListShortResponce = response.body();
+                arrayListResponce = response.body();
                 dataCallback.onDataFromInternetLoaded();
             }
 

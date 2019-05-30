@@ -5,7 +5,8 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <ProgressBar
         android:id="@+id/activity_repositories_pb"
@@ -27,13 +28,14 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="164dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="0dp"
+        android:baselineAligned="false">
 
         <FrameLayout
             android:id="@+id/activity_repositories_fl_fragment_repo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
 
         <FrameLayout
             android:id="@+id/activity_repositories_fl_fragment_detailed"

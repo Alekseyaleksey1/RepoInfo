@@ -15,9 +15,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public static ArrayList<RepositoryModel> arrayList = new ArrayList<>();
-    ItemClickedCallback callback;
+    private ItemClickedCallback callback;
 
-    public void registerForCallback(ItemClickedCallback callback) {
+    public void registerForListCallback(ItemClickedCallback callback) {
         this.callback = callback;
     }
 
@@ -47,13 +47,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         callback.onItemClicked(v);
     }
 
-    public class RecycleViewHolder extends RecyclerView.ViewHolder {
+    class RecycleViewHolder extends RecyclerView.ViewHolder {
         private TextView list_item_tv_repositoryname;
         private TextView list_item_tv_starsnumber;
         private TextView list_item_tv_forksnumber;
         private TextView list_item_tv_watchesnumber;
 
-        public RecycleViewHolder(@NonNull View itemView) {
+        RecycleViewHolder(@NonNull View itemView) {
             super(itemView);
             list_item_tv_repositoryname = itemView.findViewById(R.id.list_item_tv_repositoryname_text);
             list_item_tv_starsnumber = itemView.findViewById(R.id.list_item_tv_starsnumber_text);

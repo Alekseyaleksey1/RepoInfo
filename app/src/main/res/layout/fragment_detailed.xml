@@ -12,16 +12,17 @@
 
         <TextView
             android:id="@+id/fragment_detailed_tv_fullname_hint"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="Full name:" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/full_name" />
 
         <TextView
             android:id="@+id/fragment_detailed_tv_fullname_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Pick repository from list" />
+            android:hint="@string/pick_repository_from_list" />
     </LinearLayout>
 
     <LinearLayout
@@ -31,16 +32,17 @@
 
         <TextView
             android:id="@+id/fragment_detailed_tv_description_hint"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="Description:" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/description" />
 
         <TextView
             android:id="@+id/fragment_detailed_tv_description_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Pick repository from list" />
+            android:hint="@string/pick_repository_from_list" />
     </LinearLayout>
 
     <LinearLayout
@@ -50,16 +52,17 @@
 
         <TextView
             android:id="@+id/fragment_detailed_tv_url_hint"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="URL:" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/url" />
 
         <TextView
             android:id="@+id/fragment_detailed_tv_url_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Pick repository from list" />
+            android:hint="@string/pick_repository_from_list" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,16 +72,17 @@
 
         <TextView
             android:id="@+id/fragment_detailed_tv_openissues_hint"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="Number of issues:" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/number_of_issues" />
 
         <TextView
             android:id="@+id/fragment_detailed_tv_openissues_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Pick repository from list" />
+            android:hint="@string/pick_repository_from_list" />
     </LinearLayout>
 
 </LinearLayout>

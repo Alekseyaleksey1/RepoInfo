@@ -12,21 +12,18 @@
 
         <TextView
             android:id="@+id/list_item_tv_repositoryname_hint"
-            android:layout_width="30dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:text="Repository name" />
+            android:text="@string/repository_name" />
 
         <TextView
             android:id="@+id/list_item_tv_repositoryname_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="2"
-            android:text="TextView" />
+            android:layout_marginRight="5dp" />
 
     </LinearLayout>
 
@@ -37,19 +34,16 @@
 
         <TextView
             android:id="@+id/list_item_tv_starsnumber_hint"
-            android:layout_width="30dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="Number of stars" />
+            android:text="@string/number_of_stars" />
 
         <TextView
             android:id="@+id/list_item_tv_starsnumber_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="2"
-            android:text="TextView" />
+            android:layout_marginRight="5dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,19 +53,16 @@
 
         <TextView
             android:id="@+id/list_item_tv_forksnumber_hint"
-            android:layout_width="30dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="Number of forks" />
+            android:text="@string/number_of_forks" />
 
         <TextView
             android:id="@+id/list_item_tv_forksnumber_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="2"
-            android:text="TextView" />
+            android:layout_marginRight="5dp" />
 
     </LinearLayout>
 
@@ -82,20 +73,17 @@
 
         <TextView
             android:id="@+id/list_item_tv_watchesnumber_hint"
-            android:layout_width="30dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:text="Number of watches" />
+            android:text="@string/number_of_watches" />
 
         <TextView
             android:id="@+id/list_item_tv_watchesnumber_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="2"
-            android:text="TextView" />
+            android:layout_marginRight="5dp" />
     </LinearLayout>
 
 </LinearLayout>

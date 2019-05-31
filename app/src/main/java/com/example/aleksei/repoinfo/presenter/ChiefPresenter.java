@@ -5,7 +5,12 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import com.example.aleksei.repoinfo.R;
 import com.example.aleksei.repoinfo.model.DataWorker;
 import com.example.aleksei.repoinfo.model.database.DataIntentService;
 import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
@@ -15,7 +20,7 @@ import com.example.aleksei.repoinfo.view.ViewInterface;
 
 import java.io.File;
 
-public class ChiefPresenter implements DataWorker.DataCallback {
+public class ChiefPresenter implements DataWorker.DataCallback, RecyclerViewAdapter.ItemClickedCallback {
 
     private ViewInterface viewInterface;
     private Context appContext;
@@ -36,9 +41,10 @@ public class ChiefPresenter implements DataWorker.DataCallback {
 
     public void onUIReady(ViewInterface viewInterface, Context appContext) {
         viewInterface.showLoading();
-        this.viewInterface =  viewInterface;
+        this.viewInterface = viewInterface;
         this.appContext = appContext;
         DataWorker.getInstance(appContext).registerForDataCallback(this);
+        RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
         if (checkDBExists(appContext)) {
             onDataInDBPresent();
         } else {
@@ -75,8 +81,13 @@ public class ChiefPresenter implements DataWorker.DataCallback {
         LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).registerReceiver(receiver, intentFilter);
     }
 
-    public void removeReceiver(ViewActivity viewActivity){
+    public void removeReceiver(ViewActivity viewActivity) {
         LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onItemClicked(View clickedView) {
+        viewInterface.showItemOnClickedPosition(clickedView);
     }
 }
 

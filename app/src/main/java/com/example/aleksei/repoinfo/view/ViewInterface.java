@@ -1,5 +1,7 @@
 package com.example.aleksei.repoinfo.view;
 
+import android.view.View;
+
 public interface ViewInterface {
 
     void initializeUI();
@@ -9,4 +11,6 @@ public interface ViewInterface {
     void hideLoading();
 
     void showInternetError(ViewInterface viewInterface);
+
+    void showItemOnClickedPosition(View view);
 }

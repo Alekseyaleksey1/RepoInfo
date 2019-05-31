@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,15 +16,16 @@ import com.example.aleksei.repoinfo.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ViewActivity extends FragmentActivity implements ViewInterface, RecyclerViewAdapter.ItemClickedCallback {
+public class ViewActivity extends FragmentActivity implements ViewInterface {
 
     private static final String DETAILED_FRAGMENT_KEY = "detailedInfoFragment";
-    private DetailedInfoFragment detailedInfoFragment;
     @BindView(R.id.activity_repositories_pb)
     ProgressBar progressBar;
     @BindView(R.id.activity_view_ll)
     LinearLayout fragmentsHolder;
     private ChiefPresenter chiefPresenter;
+    private DetailedInfoFragment detailedInfoFragment;
+    private RepositoriesFragment repositoriesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
             detailedInfoFragment = (DetailedInfoFragment) getSupportFragmentManager().getFragment(savedInstanceState, DETAILED_FRAGMENT_KEY);
         } else
             detailedInfoFragment = new DetailedInfoFragment();
-        RepositoriesFragment repositoriesFragment = new RepositoriesFragment();
+        repositoriesFragment = new RepositoriesFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
@@ -85,10 +85,15 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
     }
 
     @Override
+    public void showItemOnClickedPosition(View clickedView) {
+        int itemPosition = repositoriesFragment.repoFragmentRecyclerView.getChildAdapterPosition(clickedView);
+        detailedInfoFragment.setDetailedData(RecyclerViewAdapter.listDataRepositories.get(itemPosition));
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         chiefPresenter.setReceiver(this);
-        RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
         chiefPresenter.onUIReady(this, this);
     }
 
@@ -102,12 +107,5 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, DETAILED_FRAGMENT_KEY, detailedInfoFragment);
-    }
-
-    @Override
-    public void onItemClicked(View v) {
-        RecyclerView recyclerView = findViewById(R.id.fragment_repositories_rv);
-        int itemPosition = recyclerView.getChildAdapterPosition(v);
-        detailedInfoFragment.setDetailedData(RecyclerViewAdapter.arrayList.get(itemPosition));
     }
 }

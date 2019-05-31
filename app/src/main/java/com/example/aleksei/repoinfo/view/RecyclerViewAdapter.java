@@ -12,9 +12,17 @@ import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecycleViewHolder> implements View.OnClickListener {
-    
-    static ArrayList<RepositoryModel> listDataRepositories = new ArrayList<>();
+
+    private static ArrayList<RepositoryModel> listDataRepositories = new ArrayList<>();
     private ItemClickedCallback callback;
+
+    public static ArrayList<RepositoryModel> getListDataRepositories() {
+        return listDataRepositories;
+    }
+
+    public static void setListDataRepositories(ArrayList<RepositoryModel> listDataRepositories) {
+        RecyclerViewAdapter.listDataRepositories = listDataRepositories;
+    }
 
     public void registerForListCallback(ItemClickedCallback callback) {
         this.callback = callback;
@@ -35,10 +43,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecycleViewHolder recycleViewHolder, int i) {
-        recycleViewHolder.list_item_tv_repositoryname.setText(listDataRepositories.get(i).getName());
-        recycleViewHolder.list_item_tv_starsnumber.setText(String.valueOf(listDataRepositories.get(i).getStargazersCount()));
-        recycleViewHolder.list_item_tv_forksnumber.setText(String.valueOf(listDataRepositories.get(i).getForks()));
-        recycleViewHolder.list_item_tv_watchesnumber.setText(String.valueOf(listDataRepositories.get(i).getWatchersCount()));
+        recycleViewHolder.list_item_tv_repositoryname.setText(getListDataRepositories().get(i).getName());
+        recycleViewHolder.list_item_tv_starsnumber.setText(String.valueOf(getListDataRepositories().get(i).getStargazersCount()));
+        recycleViewHolder.list_item_tv_forksnumber.setText(String.valueOf(getListDataRepositories().get(i).getForks()));
+        recycleViewHolder.list_item_tv_watchesnumber.setText(String.valueOf(getListDataRepositories().get(i).getWatchersCount()));
     }
 
     @Override
@@ -63,10 +71,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return listDataRepositories.size();
+        return getListDataRepositories().size();
     }
 
     public static void setDataToAdapter(ArrayList<RepositoryModel> arrayList) {
-        RecyclerViewAdapter.listDataRepositories = arrayList;
+        RecyclerViewAdapter.setListDataRepositories(arrayList);
+        //listDataRepositories = arrayList;
     }
 }

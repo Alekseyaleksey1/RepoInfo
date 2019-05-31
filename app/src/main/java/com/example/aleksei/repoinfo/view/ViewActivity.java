@@ -87,7 +87,7 @@ public class ViewActivity extends FragmentActivity implements ViewInterface {
     @Override
     public void showItemOnClickedPosition(View clickedView) {
         int itemPosition = repositoriesFragment.repoFragmentRecyclerView.getChildAdapterPosition(clickedView);
-        detailedInfoFragment.setDetailedData(RecyclerViewAdapter.listDataRepositories.get(itemPosition));
+        detailedInfoFragment.setDetailedData(RecyclerViewAdapter.getListDataRepositories().get(itemPosition));
     }
 
     @Override

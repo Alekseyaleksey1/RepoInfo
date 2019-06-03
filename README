@@ -1,1 +1,15 @@
+Architecture MVP
 
+
+Short architecture description
+
+Application consists of three modules:
+
+Model - module which is responsible for different operations with data, such as downloading data from internet, saving data to database 
+and retrieving it. This module contains of classes for creating database and working with it with use of Room library, classes for tuning 
+Retrofit and working with GitHub API, POJO class, that is using during parsing API response and during saving/retrieving data from DB.
+
+View - module wherein occurs all kind of actions relative to UI - initializing views, showing to user loading and error messages, showing 
+detailed information about repository etc.
+
+Presenter - module which uses previous two modules in general app work

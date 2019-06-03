@@ -1,0 +1,17 @@
+Architecture - MVP
+
+
+Short architecture description
+
+Application consists of three modules:
+
+Model - module which is responsible for operations with data, such as - downloading data from internet, saving data to database and 
+retrieving it. This module contains of classes for creating database and working with it using Room library, classes for tuning 
+Retrofit and working with GitHub API.
+
+View - module wherein take place data showing from database and occurs all kind of relative to UI actions - initializing views, 
+showing loading and error messages to user, showing detailed information about picked from list repository.
+
+Presenter - module that manages and controls work flow of application by using previous two modules, interacts with View using 
+ViewInterface, interacts with Model for getting data to it and from it, directs data to View and controls it.
+

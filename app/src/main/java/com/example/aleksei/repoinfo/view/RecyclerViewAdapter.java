@@ -16,15 +16,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static ArrayList<RepositoryModel> listDataRepositories = new ArrayList<>();
     private ItemClickedCallback callback;
 
-    public static ArrayList<RepositoryModel> getListDataRepositories() {
+    static ArrayList<RepositoryModel> getListDataRepositories() {
         return listDataRepositories;
     }
 
-    public static void setListDataRepositories(ArrayList<RepositoryModel> listDataRepositories) {
+    private static void setListDataRepositories(ArrayList<RepositoryModel> listDataRepositories) {
         RecyclerViewAdapter.listDataRepositories = listDataRepositories;
     }
 
-    public void registerForListCallback(ItemClickedCallback callback) {
+    void registerForListCallback(ItemClickedCallback callback) {
         this.callback = callback;
     }
 
@@ -43,10 +43,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecycleViewHolder recycleViewHolder, int i) {
-        recycleViewHolder.list_item_tv_repositoryname.setText(getListDataRepositories().get(i).getName());
-        recycleViewHolder.list_item_tv_starsnumber.setText(String.valueOf(getListDataRepositories().get(i).getStargazersCount()));
-        recycleViewHolder.list_item_tv_forksnumber.setText(String.valueOf(getListDataRepositories().get(i).getForks()));
-        recycleViewHolder.list_item_tv_watchesnumber.setText(String.valueOf(getListDataRepositories().get(i).getWatchersCount()));
+        recycleViewHolder.tvRepositoryName.setText(getListDataRepositories().get(i).getName());
+        recycleViewHolder.tvStarsNumber.setText(String.valueOf(getListDataRepositories().get(i).getStargazersCount()));
+        recycleViewHolder.tvForksNumber.setText(String.valueOf(getListDataRepositories().get(i).getForks()));
+        recycleViewHolder.tvWatchesNumber.setText(String.valueOf(getListDataRepositories().get(i).getWatchersCount()));
     }
 
     @Override
@@ -55,17 +55,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     class RecycleViewHolder extends RecyclerView.ViewHolder {
-        private TextView list_item_tv_repositoryname;
-        private TextView list_item_tv_starsnumber;
-        private TextView list_item_tv_forksnumber;
-        private TextView list_item_tv_watchesnumber;
+        private TextView tvRepositoryName;
+        private TextView tvStarsNumber;
+        private TextView tvForksNumber;
+        private TextView tvWatchesNumber;
 
         RecycleViewHolder(@NonNull View itemView) {
             super(itemView);
-            list_item_tv_repositoryname = itemView.findViewById(R.id.list_item_tv_repositoryname_text);
-            list_item_tv_starsnumber = itemView.findViewById(R.id.list_item_tv_starsnumber_text);
-            list_item_tv_forksnumber = itemView.findViewById(R.id.list_item_tv_forksnumber_text);
-            list_item_tv_watchesnumber = itemView.findViewById(R.id.list_item_tv_watchesnumber_text);
+            tvRepositoryName = itemView.findViewById(R.id.list_item_tv_repositoryname_text);
+            tvStarsNumber = itemView.findViewById(R.id.list_item_tv_starsnumber_text);
+            tvForksNumber = itemView.findViewById(R.id.list_item_tv_forksnumber_text);
+            tvWatchesNumber = itemView.findViewById(R.id.list_item_tv_watchesnumber_text);
         }
     }
 
@@ -76,6 +76,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static void setDataToAdapter(ArrayList<RepositoryModel> arrayList) {
         RecyclerViewAdapter.setListDataRepositories(arrayList);
-        //listDataRepositories = arrayList;
     }
 }

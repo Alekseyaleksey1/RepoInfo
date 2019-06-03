@@ -13,6 +13,7 @@ public class DataIntentService extends IntentService {
 
     public static final String ACTION_SAVE_DB = "saveDataToDatabase";
     public static final String ACTION_GET_DB = "getDataFromDatabase";
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -29,21 +30,23 @@ public class DataIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Intent resultIntent = new Intent();
-        switch (intent.getAction()) {
-            case (ACTION_SAVE_DB): {
-                ArrayList<RepositoryModel> repositoriesList = intent.getParcelableArrayListExtra(DataWorker.REPOSITORIES_LIST_KEY);
-                for (RepositoryModel repository : repositoriesList) {
-                    DataWorker.getInstance(this).getDb().getRepositoryDao().insert(repository);
+        if (intent.getAction() != null) {
+            switch (intent.getAction()) {
+                case (ACTION_SAVE_DB): {
+                    ArrayList<RepositoryModel> repositoriesList = intent.getParcelableArrayListExtra(DataWorker.REPOSITORIES_LIST_KEY);
+                    for (RepositoryModel repository : repositoriesList) {
+                        DataWorker.getInstance(this).getDb().getRepositoryDao().insert(repository);
+                    }
+                    resultIntent.setAction(ACTION_SAVE_DB);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
+                    break;
                 }
-                resultIntent.setAction(ACTION_SAVE_DB);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
-                break;
-            }
-            case (ACTION_GET_DB): {
-                DataWorker.getInstance(this).setDataToRetrieve((ArrayList<RepositoryModel>) DataWorker.getInstance(this).getDb().getRepositoryDao().getAll());
-                resultIntent.setAction(ACTION_GET_DB);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
-                break;
+                case (ACTION_GET_DB): {
+                    DataWorker.getInstance(this).setDataToRetrieve((ArrayList<RepositoryModel>) DataWorker.getInstance(this).getDb().getRepositoryDao().getAll());
+                    resultIntent.setAction(ACTION_GET_DB);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
+                    break;
+                }
             }
         }
     }

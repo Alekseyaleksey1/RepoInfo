@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.aleksei.repoinfo.R;
-import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,7 +25,6 @@ public class RepositoriesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_repositories, null);
         unbinder = ButterKnife.bind(this, view);
         repoFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

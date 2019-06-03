@@ -9,23 +9,25 @@ import com.example.aleksei.repoinfo.model.database.DataIntentService;
 
 public class DataActionReceiver extends BroadcastReceiver {
 
-    private DataWorker dataWorker;
+    private DataWorker dataWorkerInstance;
 
     DataActionReceiver(DataWorker dataWorker) {
-        this.dataWorker = dataWorker;
+        dataWorkerInstance = dataWorker;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        switch (intent.getAction()) {
-            case (DataIntentService.ACTION_SAVE_DB): {
-                dataWorker.dataCallback.onDataInDBPresent();
-                break;
-            }
-            case (DataIntentService.ACTION_GET_DB): {
-                dataWorker.dataCallback.onDataFromDBRetrieved();
-                break;
+        if (intent.getAction() != null) {
+            switch (intent.getAction()) {
+                case (DataIntentService.ACTION_SAVE_DB): {
+                    dataWorkerInstance.dataCallback.onDataInDBPresent();
+                    break;
+                }
+                case (DataIntentService.ACTION_GET_DB): {
+                    dataWorkerInstance.dataCallback.onDataFromDBRetrieved();
+                    break;
+                }
             }
         }
     }

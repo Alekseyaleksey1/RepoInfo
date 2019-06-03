@@ -9,17 +9,16 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
+import com.example.aleksei.repoinfo.model.DataWorker;
 import com.example.aleksei.repoinfo.presenter.ChiefPresenter;
 import com.example.aleksei.repoinfo.R;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ViewActivity extends FragmentActivity implements ViewInterface {
+public class ViewActivity extends FragmentActivity implements ViewInterface, RecyclerViewAdapter.ItemClickedCallback {
 
     private static final String DETAILED_FRAGMENT_KEY = "detailedInfoFragment";
-    @BindView(R.id.activity_repositories_pb)
+    @BindView(R.id.activity_view_pb)
     ProgressBar progressBar;
     @BindView(R.id.activity_view_ll)
     LinearLayout fragmentsHolder;
@@ -32,7 +31,6 @@ public class ViewActivity extends FragmentActivity implements ViewInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
         initializeUI();
-
         if (savedInstanceState != null) {
             detailedInfoFragment = (DetailedInfoFragment) getSupportFragmentManager().getFragment(savedInstanceState, DETAILED_FRAGMENT_KEY);
         } else
@@ -40,15 +38,15 @@ public class ViewActivity extends FragmentActivity implements ViewInterface {
         repositoriesFragment = new RepositoriesFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_repo, repositoriesFragment);
-        fragmentTransaction.replace(R.id.activity_repositories_fl_fragment_detailed, detailedInfoFragment);
+        fragmentTransaction.replace(R.id.activity_view_fl_fragment_repo, repositoriesFragment);
+        fragmentTransaction.replace(R.id.activity_view_fl_fragment_detailed, detailedInfoFragment);
         fragmentTransaction.commit();
     }
 
     @Override
     public void initializeUI() {
         ButterKnife.bind(this);
-        chiefPresenter = new ChiefPresenter();
+        chiefPresenter = new ChiefPresenter(DataWorker.getInstance(this), this, this);
     }
 
     @Override
@@ -64,24 +62,32 @@ public class ViewActivity extends FragmentActivity implements ViewInterface {
     }
 
     @Override
-    public void showInternetError(final ViewInterface viewInterface) {
-
+    public void showError(String errorCode) {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case (DialogInterface.BUTTON_POSITIVE): {
-                        chiefPresenter.onUIReady(viewInterface, getApplicationContext());
+                        chiefPresenter.onUIReady();
                         break;
                     }
                 }
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Internet is not available")
-                .setCancelable(false)
-                .setPositiveButton("Retry", listener)
-                .show();
+        builder.setCancelable(false)
+                .setPositiveButton("Retry", listener);
+        switch (errorCode) {
+            case (ChiefPresenter.INTERNET_AVAILABILITY_ERROR_CASE): {
+                builder.setMessage("Internet is not available");
+                break;
+            }
+            case (ChiefPresenter.INTERNET_DATA_ERROR_CASE): {
+                builder.setMessage("Error during data downloading");
+                break;
+            }
+        }
+        builder.show();
     }
 
     @Override
@@ -94,7 +100,8 @@ public class ViewActivity extends FragmentActivity implements ViewInterface {
     protected void onStart() {
         super.onStart();
         chiefPresenter.setReceiver(this);
-        chiefPresenter.onUIReady(this, this);
+        RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
+        chiefPresenter.onUIReady();
     }
 
     @Override
@@ -107,5 +114,10 @@ public class ViewActivity extends FragmentActivity implements ViewInterface {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, DETAILED_FRAGMENT_KEY, detailedInfoFragment);
+    }
+
+    @Override
+    public void onItemClicked(View clickedView) {
+        chiefPresenter.prepareClickedView(clickedView);
     }
 }

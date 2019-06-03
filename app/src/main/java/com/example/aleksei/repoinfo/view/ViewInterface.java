@@ -10,7 +10,7 @@ public interface ViewInterface {
 
     void hideLoading();
 
-    void showInternetError(ViewInterface viewInterface);
+    void showError(String errorCode);
 
     void showItemOnClickedPosition(View view);
 }

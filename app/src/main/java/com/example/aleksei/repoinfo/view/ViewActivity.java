@@ -99,7 +99,7 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
     @Override
     protected void onStart() {
         super.onStart();
-        chiefPresenter.setReceiver(this);
+        chiefPresenter.setReceiver();
         RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
         chiefPresenter.onUIReady();
     }
@@ -107,7 +107,7 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
     @Override
     protected void onStop() {
         super.onStop();
-        chiefPresenter.removeReceiver(this);
+        chiefPresenter.removeReceiver();
     }
 
     @Override

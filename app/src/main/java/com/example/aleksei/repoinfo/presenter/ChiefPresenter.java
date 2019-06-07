@@ -76,16 +76,16 @@ public class ChiefPresenter implements DataWorker.DataCallback {
         viewInterfaceInstance.showError(INTERNET_DATA_ERROR_CASE);
     }
 
-    public void setReceiver(ViewActivity viewActivity) {
+    public void setReceiver() {
         receiver = new DataActionReceiver(dataWorkerInstance);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DataIntentService.ACTION_SAVE_DB);
         intentFilter.addAction(DataIntentService.ACTION_GET_DB);
-        LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).registerReceiver(receiver, intentFilter);
+        LocalBroadcastManager.getInstance(appContext).registerReceiver(receiver, intentFilter);
     }
 
-    public void removeReceiver(ViewActivity viewActivity) {
-        LocalBroadcastManager.getInstance(viewActivity.getApplicationContext()).unregisterReceiver(receiver);
+    public void removeReceiver() {
+        LocalBroadcastManager.getInstance(appContext).unregisterReceiver(receiver);
     }
 
     public void prepareClickedView(View clickedView) {

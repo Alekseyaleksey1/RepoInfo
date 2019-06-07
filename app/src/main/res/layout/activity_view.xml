@@ -11,14 +11,10 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="80dp"
         android:layout_height="82dp"
-        android:layout_marginStart="164dp"
-        android:layout_marginLeft="164dp"
         app:layout_constraintBottom_toBottomOf="@+id/activity_view_cl"
         app:layout_constraintEnd_toEndOf="@+id/activity_view_cl"
-        app:layout_constraintHorizontal_bias="0.005"
         app:layout_constraintStart_toStartOf="@+id/activity_view_cl"
-        app:layout_constraintTop_toTopOf="@+id/activity_view_cl"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintTop_toTopOf="@+id/activity_view_cl" />
 
     <LinearLayout
         android:id="@+id/activity_view_ll"

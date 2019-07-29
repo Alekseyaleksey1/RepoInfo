@@ -2,22 +2,21 @@ package com.example.aleksei.repoinfo.model;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.Intent;
 import com.example.aleksei.repoinfo.model.api.RetrofitManager;
 import com.example.aleksei.repoinfo.model.database.ApplicationDatabase;
-import com.example.aleksei.repoinfo.model.database.DataIntentService;
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import java.util.ArrayList;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DataWorker {
 
-    public static final String REPOSITORIES_LIST_KEY = "repositoriesList";
+    public static final String INTERNET_DATA_ERROR_CASE = "internetDataError";
     public static final String DB_NAME = "db";
     private static DataWorker dataWorker;
-    public DataCallback dataCallback;
     private ArrayList<RepositoryModel> listOfRepositoriesResponse;
     private ArrayList<RepositoryModel> dataToRetrieve;
     private ApplicationDatabase db;
@@ -33,19 +32,19 @@ public class DataWorker {
         return dataWorker;
     }
 
-    public ArrayList<RepositoryModel> getListOfRepositoriesResponse() {
+    private ArrayList<RepositoryModel> getListOfRepositoriesResponse() {
         return listOfRepositoriesResponse;
     }
 
-    private void setListOfRepositoriesResponse(ArrayList<RepositoryModel> listOfRepositoriesResponse) {
+    public void setListOfRepositoriesResponse(ArrayList<RepositoryModel> listOfRepositoriesResponse) {
         this.listOfRepositoriesResponse = listOfRepositoriesResponse;
     }
 
-    public ApplicationDatabase getDb() {
+    private ApplicationDatabase getDb() {
         return db;
     }
 
-    public void setDataToRetrieve(ArrayList<RepositoryModel> dataToRetrieve) {
+    private void setDataToRetrieve(ArrayList<RepositoryModel> dataToRetrieve) {
         this.dataToRetrieve = dataToRetrieve;
     }
 
@@ -53,45 +52,35 @@ public class DataWorker {
         return dataToRetrieve;
     }
 
-    public void registerForDataCallback(DataCallback callback) {
-        dataCallback = callback;
+    public Observable<ArrayList<RepositoryModel>> getDataFromInternet() {
+        return RetrofitManager.getInstance().getJSONApi().getData()
+                .subscribeOn(Schedulers.io());
     }
 
-    public interface DataCallback {
-        void onDataInDBPresent();
-
-        void onDataFromDBRetrieved();
-
-        void onDataFromInternetLoaded();
-
-        void onDataError();
+    public Completable saveDataToDatabase() {
+        return Completable
+                .create(new CompletableOnSubscribe() {
+                    @Override
+                    public void subscribe(CompletableEmitter emitter) {
+                        for (RepositoryModel repository : getListOfRepositoriesResponse()) {
+                            getDb().getRepositoryDao().insert(repository);
+                        }
+                        emitter.onComplete();
+                    }
+                })
+                .subscribeOn(Schedulers.io());
     }
 
-    public void getDataFromInternet() {
-        RetrofitManager.getInstance().getJSONApi().getData().enqueue(new Callback<ArrayList<RepositoryModel>>() {
-            @Override
-            public void onResponse(Call<ArrayList<RepositoryModel>> call, Response<ArrayList<RepositoryModel>> response) {
-                setListOfRepositoriesResponse(response.body());
-                dataCallback.onDataFromInternetLoaded();
-            }
-            @Override
-            public void onFailure(Call<ArrayList<RepositoryModel>> call, Throwable t) {
-            dataCallback.onDataError();
-            }
-        });
-    }
-
-    public void saveDataToDatabase(Context appContext, ArrayList<RepositoryModel> repositoriesList) {
-        Intent intent = new Intent(appContext, DataIntentService.class);
-        intent.putParcelableArrayListExtra(REPOSITORIES_LIST_KEY, repositoriesList);
-        intent.setAction(DataIntentService.ACTION_SAVE_DB);
-        appContext.startService(intent);
-    }
-
-    public void getDataFromDatabase(Context appContext) {
-        Intent intent = new Intent(appContext, DataIntentService.class);
-        intent.setAction(DataIntentService.ACTION_GET_DB);
-        appContext.startService(intent);
+    public Completable getDataFromDatabase() {
+        return Completable
+                .create(new CompletableOnSubscribe() {
+                    @Override
+                    public void subscribe(CompletableEmitter emitter) {
+                        setDataToRetrieve((ArrayList<RepositoryModel>) getDb().getRepositoryDao().getAll());
+                        emitter.onComplete();
+                    }
+                })
+                .subscribeOn(Schedulers.io());
     }
 }
 

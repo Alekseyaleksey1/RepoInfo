@@ -10,23 +10,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.aleksei.repoinfo.R;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class RepositoriesFragment extends Fragment {
 
     public static RecyclerViewAdapter recyclerViewAdapter;
     static int currentVisiblePosition = 0;
-    @BindView(R.id.fragment_repositories_rv)
-    public RecyclerView repoFragmentRecyclerView;
-    private Unbinder unbinder;
+    private RecyclerView repoFragmentRecyclerView;
+
+    public RecyclerView getRepoFragmentRecyclerView() {
+        return repoFragmentRecyclerView;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_repositories, null);
-        unbinder = ButterKnife.bind(this, view);
+        repoFragmentRecyclerView = view.findViewById(R.id.fragment_repositories_rv);
         repoFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerViewAdapter = new RecyclerViewAdapter();
         repoFragmentRecyclerView.setAdapter(recyclerViewAdapter);
@@ -52,6 +51,5 @@ public class RepositoriesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 }

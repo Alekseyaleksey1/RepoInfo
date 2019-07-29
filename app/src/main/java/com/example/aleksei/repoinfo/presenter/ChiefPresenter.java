@@ -1,27 +1,28 @@
 package com.example.aleksei.repoinfo.presenter;
 
 import android.content.Context;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import com.example.aleksei.repoinfo.model.DataWorker;
-import com.example.aleksei.repoinfo.model.database.DataIntentService;
+import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import com.example.aleksei.repoinfo.view.RecyclerViewAdapter;
 import com.example.aleksei.repoinfo.view.RepositoriesFragment;
-import com.example.aleksei.repoinfo.view.ViewActivity;
 import com.example.aleksei.repoinfo.view.ViewInterface;
 import java.io.File;
+import java.util.ArrayList;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
-public class ChiefPresenter implements DataWorker.DataCallback {
+public class ChiefPresenter {
 
     public static final String INTERNET_AVAILABILITY_ERROR_CASE = "internetAvailabilityError";
-    public static final String INTERNET_DATA_ERROR_CASE = "internetDataError";
     private ViewInterface viewInterfaceInstance;
     private DataWorker dataWorkerInstance;
     private Context appContext;
-    private DataActionReceiver receiver;
+    private CompositeDisposable disposable;
 
     public ChiefPresenter(DataWorker dataWorkerInstance, ViewInterface viewInterface, Context appContext) {
         this.dataWorkerInstance = dataWorkerInstance;
@@ -42,54 +43,65 @@ public class ChiefPresenter implements DataWorker.DataCallback {
 
     public void onUIReady() {
         viewInterfaceInstance.showLoading();
-        dataWorkerInstance.registerForDataCallback(this);
+        disposable = new CompositeDisposable();
         if (checkDBExists(appContext)) {
             onDataInDBPresent();
         } else {
             if (checkInternetAvailability(appContext)) {
-                dataWorkerInstance.getDataFromInternet();
+                loadDataFromInternet();
             } else {
                 viewInterfaceInstance.showError(INTERNET_AVAILABILITY_ERROR_CASE);
             }
         }
     }
 
-    @Override
-    public void onDataInDBPresent() {
-        dataWorkerInstance.getDataFromDatabase(appContext);
+    private void loadDataFromInternet() {
+        disposable.add(dataWorkerInstance.getDataFromInternet()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ArrayList<RepositoryModel>>() {
+                    @Override
+                    public void accept(ArrayList<RepositoryModel> repositoryModelArrayList) {
+                        dataWorkerInstance.setListOfRepositoriesResponse(repositoryModelArrayList);
+                        onDataFromInternetLoaded();
+                    }
+                }));
     }
 
-    @Override
-    public void onDataFromInternetLoaded() {
-        dataWorkerInstance.saveDataToDatabase(appContext, dataWorkerInstance.getListOfRepositoriesResponse());
+    private void onDataFromInternetLoaded() {
+        disposable.add(dataWorkerInstance.saveDataToDatabase()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() {
+                        onDataInDBPresent();
+                    }
+                }));
     }
 
-    @Override
-    public void onDataFromDBRetrieved() {
+    private void onDataInDBPresent() {
+        disposable.add(dataWorkerInstance.getDataFromDatabase()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() {
+                        onDataFromDBRetrieved();
+                    }
+                }));
+    }
+
+
+    private void onDataFromDBRetrieved() {
         RecyclerViewAdapter.setDataToAdapter(dataWorkerInstance.getDataToRetrieve());
         RepositoriesFragment.recyclerViewAdapter.notifyDataSetChanged();
         viewInterfaceInstance.hideLoading();
     }
 
-    @Override
-    public void onDataError() {
-        viewInterfaceInstance.showError(INTERNET_DATA_ERROR_CASE);
-    }
-
-    public void setReceiver() {
-        receiver = new DataActionReceiver(dataWorkerInstance);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataIntentService.ACTION_SAVE_DB);
-        intentFilter.addAction(DataIntentService.ACTION_GET_DB);
-        LocalBroadcastManager.getInstance(appContext).registerReceiver(receiver, intentFilter);
-    }
-
-    public void removeReceiver() {
-        LocalBroadcastManager.getInstance(appContext).unregisterReceiver(receiver);
-    }
-
     public void prepareClickedView(View clickedView) {
         viewInterfaceInstance.showItemOnClickedPosition(clickedView);
+    }
+
+    public void disposeDisposable() {
+        disposable.dispose();
     }
 }
 

@@ -19,9 +19,5 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".model.database.DataIntentService">
-
-        </service>
-
     </application>
 </manifest>

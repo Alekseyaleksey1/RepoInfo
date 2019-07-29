@@ -82,7 +82,7 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
                 builder.setMessage("Internet is not available");
                 break;
             }
-            case (ChiefPresenter.INTERNET_DATA_ERROR_CASE): {
+            case (DataWorker.INTERNET_DATA_ERROR_CASE): {
                 builder.setMessage("Error during data downloading");
                 break;
             }
@@ -92,14 +92,13 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
 
     @Override
     public void showItemOnClickedPosition(View clickedView) {
-        int itemPosition = repositoriesFragment.repoFragmentRecyclerView.getChildAdapterPosition(clickedView);
+        int itemPosition = repositoriesFragment.getRepoFragmentRecyclerView().getChildAdapterPosition(clickedView);
         detailedInfoFragment.setDetailedData(RecyclerViewAdapter.getListDataRepositories().get(itemPosition));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        chiefPresenter.setReceiver();
         RepositoriesFragment.recyclerViewAdapter.registerForListCallback(this);
         chiefPresenter.onUIReady();
     }
@@ -107,7 +106,7 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
     @Override
     protected void onStop() {
         super.onStop();
-        chiefPresenter.removeReceiver();
+        chiefPresenter.disposeDisposable();
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.example.aleksei.repoinfo.view;
 
 import android.view.View;
 
-public interface ViewInterface {
+public interface RepoListInterface {
 
     void initializeUI();
 

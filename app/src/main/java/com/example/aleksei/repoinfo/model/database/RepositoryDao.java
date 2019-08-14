@@ -6,12 +6,14 @@ import android.arch.persistence.room.Query;
 import com.example.aleksei.repoinfo.model.pojo.RepositoryModel;
 import java.util.List;
 
+import io.reactivex.Single;
+
 @Dao
 public interface RepositoryDao {
 
     @Query("SELECT * FROM repositorymodel")
-    List<RepositoryModel> getAll();
+    Single<List<RepositoryModel>> getAll();
 
     @Insert
-    void insert(RepositoryModel repository);
+    void insert(List<RepositoryModel> repository);
 }

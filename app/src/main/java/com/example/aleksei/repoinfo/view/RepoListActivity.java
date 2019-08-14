@@ -15,7 +15,7 @@ import com.example.aleksei.repoinfo.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ViewActivity extends FragmentActivity implements ViewInterface, RecyclerViewAdapter.ItemClickedCallback {
+public class RepoListActivity extends FragmentActivity implements RepoListInterface, RecyclerViewAdapter.ItemClickedCallback {
 
     private static final String DETAILED_FRAGMENT_KEY = "detailedInfoFragment";
     @BindView(R.id.activity_view_pb)
@@ -76,14 +76,14 @@ public class ViewActivity extends FragmentActivity implements ViewInterface, Rec
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false)
-                .setPositiveButton("Retry", listener);
+                .setPositiveButton(R.string.btn_error_retry, listener);
         switch (errorCode) {
             case (ChiefPresenter.INTERNET_AVAILABILITY_ERROR_CASE): {
-                builder.setMessage("Internet is not available");
+                builder.setMessage(R.string.msg_error_internet);
                 break;
             }
             case (DataWorker.INTERNET_DATA_ERROR_CASE): {
-                builder.setMessage("Error during data downloading");
+                builder.setMessage(R.string.msg_error_data);
                 break;
             }
         }

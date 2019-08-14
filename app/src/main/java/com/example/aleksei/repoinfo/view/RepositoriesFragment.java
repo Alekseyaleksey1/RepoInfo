@@ -24,7 +24,7 @@ public class RepositoriesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_repositories, null);
+        View view = inflater.inflate(R.layout.fragment_repositories, container, false);
         repoFragmentRecyclerView = view.findViewById(R.id.fragment_repositories_rv);
         repoFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerViewAdapter = new RecyclerViewAdapter();
@@ -46,10 +46,5 @@ public class RepositoriesFragment extends Fragment {
         if (linearLayoutManager != null) {
             currentVisiblePosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 }

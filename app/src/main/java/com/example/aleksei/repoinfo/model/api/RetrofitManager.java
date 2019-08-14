@@ -18,7 +18,7 @@ public class RetrofitManager {
                 .build();
     }
 
-    public static RetrofitManager getInstance() {
+    public static synchronized RetrofitManager getInstance() {
 
         if (retrofitManager == null) {
             retrofitManager = new RetrofitManager();

@@ -42,11 +42,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecycleViewHolder recycleViewHolder, int i) {
-        recycleViewHolder.tvRepositoryName.setText(getListDataRepositories().get(i).getName());
-        recycleViewHolder.tvStarsNumber.setText(String.valueOf(getListDataRepositories().get(i).getStargazersCount()));
-        recycleViewHolder.tvForksNumber.setText(String.valueOf(getListDataRepositories().get(i).getForks()));
-        recycleViewHolder.tvWatchesNumber.setText(String.valueOf(getListDataRepositories().get(i).getWatchersCount()));
+    public void onBindViewHolder(@NonNull RecycleViewHolder recycleViewHolder, int index) {
+        RepositoryModel repository = getListDataRepositories().get(index);
+        recycleViewHolder.tvRepositoryName.setText(repository.getName());
+        recycleViewHolder.tvStarsNumber.setText(String.valueOf(repository.getStargazersCount()));
+        recycleViewHolder.tvForksNumber.setText(String.valueOf(repository.getForks()));
+        recycleViewHolder.tvWatchesNumber.setText(String.valueOf(repository.getWatchersCount()));
     }
 
     @Override

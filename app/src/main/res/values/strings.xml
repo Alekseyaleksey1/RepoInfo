@@ -9,4 +9,7 @@
     <string name="number_of_stars">Number of stars:</string>
     <string name="number_of_forks">Number of forks:</string>
     <string name="number_of_watches">Number of watches:</string>
+    <string name="btn_error_retry">Retry</string>
+    <string name="msg_error_internet">Internet is not available</string>
+    <string name="msg_error_data">Error during data downloading</string>
 </resources>

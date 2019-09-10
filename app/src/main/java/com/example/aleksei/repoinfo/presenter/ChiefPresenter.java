@@ -54,7 +54,7 @@ public class ChiefPresenter {
                             @Override
                             public void accept(List<RepositoryModel> repositoryModelList) {
                                 onDataFromInternetLoaded(repositoryModelList);
-                            }
+                            } 
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) {

@@ -56,7 +56,7 @@ class RepoListActivity : FragmentActivity(), RepoListInterface, RecyclerViewAdap
         fragmentsHolder.visibility = View.VISIBLE
     }
 
-    override fun showError(errorCode: String?) {
+    override fun showError(errorCode: String) {
         val listener: DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog: DialogInterface, which: Int ->
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> chiefPresenter.onUIReady()
@@ -75,7 +75,7 @@ class RepoListActivity : FragmentActivity(), RepoListInterface, RecyclerViewAdap
 
     override fun showItemOnClickedPosition(clickedView: View) {
         val itemPosition: Int = repositoriesFragment.repoFragmentRecyclerView.getChildAdapterPosition(clickedView)
-        detailedInfoFragment.setDetailedData(RecyclerViewAdapter.getListDataRepositories().get(itemPosition))
+        detailedInfoFragment.setDetailedData(RecyclerViewAdapter.listDataRepositories.get(itemPosition))
     }
 
     override fun onStart() {
@@ -94,7 +94,7 @@ class RepoListActivity : FragmentActivity(), RepoListInterface, RecyclerViewAdap
         supportFragmentManager.putFragment(outState, DETAILED_FRAGMENT_KEY, detailedInfoFragment)
     }
 
-    override fun onItemClicked(clickedView: View?) {
-        chiefPresenter.prepareClickedView(clickedView)
+    override fun onItemClicked(view: View) {
+        chiefPresenter.prepareClickedView(view)
     }
 }

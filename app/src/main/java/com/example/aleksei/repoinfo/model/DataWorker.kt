@@ -10,9 +10,6 @@ import io.reactivex.CompletableEmitter
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
-/*const val INTERNET_DATA_ERROR_CASE: String = "internetDataError" //todo узнать
-const val DB_NAME = "db"*/
-
 class DataWorker private constructor() {
 
     private lateinit var db: ApplicationDatabase
@@ -22,7 +19,7 @@ class DataWorker private constructor() {
         const val DB_NAME = "db"
         private var dataWorker: DataWorker? = null
 
-        @Synchronized fun getInstance(appContext: Context): DataWorker { //todo уточнить synchronized
+        @Synchronized fun getInstance(appContext: Context): DataWorker { 
            // synchronized(this) {
                 if (dataWorker == null) {
                     dataWorker = DataWorker()

@@ -19,7 +19,7 @@ class RepoListActivity : FragmentActivity(), RepoListInterface, RecyclerViewAdap
         const val DETAILED_FRAGMENT_KEY: String = "detailedInfoFragment"
     }
 
-    lateinit var progressBar: ProgressBar          //todo убрать findViewById
+    lateinit var progressBar: ProgressBar
     lateinit var fragmentsHolder: LinearLayout
     private lateinit var chiefPresenter: ChiefPresenter
     private lateinit var detailedInfoFragment: DetailedInfoFragment

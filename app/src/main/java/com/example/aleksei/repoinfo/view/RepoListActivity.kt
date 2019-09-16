@@ -12,7 +12,6 @@ import com.example.aleksei.repoinfo.R
 import com.example.aleksei.repoinfo.model.DataWorker
 import com.example.aleksei.repoinfo.presenter.ChiefPresenter
 
-
 class RepoListActivity : FragmentActivity(), RepoListInterface, RecyclerViewAdapter.ItemClickedCallback {
 
     companion object {

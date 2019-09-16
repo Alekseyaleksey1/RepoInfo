@@ -49,7 +49,5 @@ class DetailedInfoFragment : Fragment() {
             this.repository = savedInstanceState.getParcelable(REPOSITORY_KEY)
             if (repository != null) setDetailedData(repository!!)
         }
-
     }
-
 }

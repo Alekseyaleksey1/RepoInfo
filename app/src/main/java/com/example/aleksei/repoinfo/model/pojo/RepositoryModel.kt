@@ -10,20 +10,20 @@ import com.google.gson.annotations.SerializedName
 class RepositoryModel() : Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-     var idT : Int? = null
-     var name : String? = null
-     var id : Int? = null
-     var forks : Int? = null
-     var description : String? = null
-     var url : String? = null
+    var idT: Int? = null
+    var name: String? = null
+    var id: Int? = null
+    var forks: Int? = null
+    var description: String? = null
+    var url: String? = null
     @SerializedName("full_name")
-     var fullName : String? = null
+    var fullName: String? = null
     @SerializedName("stargazers_count")
-    var stargazersCount : String? = null
+    var stargazersCount: String? = null
     @SerializedName("watchers_count")
-     var watchersCount : String? = null
+    var watchersCount: String? = null
     @SerializedName("open_issues")
-     var openIssues : String? = null
+    var openIssues: String? = null
 
     constructor(parcel: Parcel) : this() {
         idT = parcel.readValue(Int::class.java.classLoader) as? Int
@@ -64,6 +64,4 @@ class RepositoryModel() : Parcelable {
             return arrayOfNulls(size)
         }
     }
-
-
 }

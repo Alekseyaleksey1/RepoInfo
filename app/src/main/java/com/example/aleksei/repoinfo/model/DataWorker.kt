@@ -19,16 +19,17 @@ class DataWorker private constructor() {
         const val DB_NAME = "db"
         private var dataWorker: DataWorker? = null
 
-        @Synchronized fun getInstance(appContext: Context): DataWorker {
-                if (dataWorker == null) {
-                    dataWorker = DataWorker()
-                    dataWorker!!.db = Room.databaseBuilder(appContext, ApplicationDatabase::class.java, DB_NAME).build()
-                }
-                return dataWorker!!
+        @Synchronized
+        fun getInstance(appContext: Context): DataWorker {
+            if (dataWorker == null) {
+                dataWorker = DataWorker()
+                dataWorker!!.db = Room.databaseBuilder(appContext, ApplicationDatabase::class.java, DB_NAME).build()
+            }
+            return dataWorker!!
         }
     }
 
-     fun getDataFromInternet(): Single<List<RepositoryModel>> {
+    fun getDataFromInternet(): Single<List<RepositoryModel>> {
         return RetrofitManager.getJSONApi().getData().subscribeOn(Schedulers.io())
     }
 

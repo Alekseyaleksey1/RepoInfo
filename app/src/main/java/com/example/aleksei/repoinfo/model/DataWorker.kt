@@ -19,14 +19,12 @@ class DataWorker private constructor() {
         const val DB_NAME = "db"
         private var dataWorker: DataWorker? = null
 
-        @Synchronized fun getInstance(appContext: Context): DataWorker { 
-           // synchronized(this) {
+        @Synchronized fun getInstance(appContext: Context): DataWorker {
                 if (dataWorker == null) {
                     dataWorker = DataWorker()
                     dataWorker!!.db = Room.databaseBuilder(appContext, ApplicationDatabase::class.java, DB_NAME).build()
                 }
                 return dataWorker!!
-           // }
         }
     }
 
